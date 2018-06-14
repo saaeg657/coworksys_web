@@ -1,7 +1,7 @@
 import React from 'react';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import componentSchema from './ComponentSchema.js';
+import componentSchema from '../../../../../InformationData/ComponentSchema.js';
 import StatementDetail from './StatementDetail.js';
 import ComponentMenuItem from './ComponentMenuItem.js';
 import EditorBody from './EditorBody.js';
