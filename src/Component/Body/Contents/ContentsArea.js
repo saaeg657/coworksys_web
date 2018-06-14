@@ -4,7 +4,7 @@ import TableArea from './TableArea.js'
 import PopupManager from './PopupManager.js'
 import * as CommonData from '../../../InformationData/CommonData.js'
 import * as util from '../../../Util/Util.js';
-import NewAutomator from './Automator/NewAutomator.js';
+import NewAutomator from './Automator/NewAutomator//NewAutomator.js';
 import DeviceInfo from './Popup/DeviceInfo.js'
 import ModelManager from '../../../Controller/ModelManager.js';
 

@@ -3,7 +3,7 @@ import * as util from '../../../Util/Util.js';
 import TableItem from './TableItem.js';
 import AutomatorGroup from './Automator/AutomatorGroup.js';
 import APIManager from '../../../Controller/APIManager.js';
-import NewAutomator from './Automator/NewAutomator.js';
+import NewAutomator from './Automator/NewAutomator/NewAutomator.js';
 import * as CommonData from '../../../InformationData/CommonData.js';
 
 export default class TableArea extends React.Component {

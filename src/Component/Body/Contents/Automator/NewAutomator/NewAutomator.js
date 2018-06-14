@@ -1,8 +1,9 @@
 import React from 'react';
-import * as properties from '../../../../Properties.js';
+import * as properties from '../../../../../Properties.js';
 import Axios from 'axios';
 import Dropdown from 'react-dropdown';
-import PopupModal from '../Popup/PopupModal.js';
+import PopupModal from '../../Popup/PopupModal.js';
+import Editor from  './Editor.js';
 var TAG = "NewAutomator";
 export default class NewAutomator extends React.Component {
     constructor(props) {
@@ -155,8 +156,9 @@ export default class NewAutomator extends React.Component {
                 <div className="text-position" onClick={this.refresh} style={{ cursor: "pointer", textDecoration: "none" }}><img src={'../images/blue_dot.png'} style={{ width: 5, height: 5 }} />{" 오토메이터"}</div>
             </div>
 
-            <div className="div-device-wrapper" style={{ marginRight: this.props.ContentsArea.props.Body.state.isShowMenu ? 250 : 70 }}>
-                <div    >
+            <div className="div-device-wrapper" style={{ marginRight: this.props.ContentsArea.props.Body.state.isShowMenu ? 250 : 70, padding: 25 }}>
+                <Editor />
+                {/* <div    >
                     <div className="div-contents-table"
                         style={{
                             backgroundColor: "white"
@@ -235,7 +237,7 @@ export default class NewAutomator extends React.Component {
                             </form>
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div>
         </div >
 
