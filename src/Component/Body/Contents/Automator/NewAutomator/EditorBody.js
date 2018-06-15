@@ -17,9 +17,7 @@ export default class EditorBody extends React.Component {
       onFocusStatement
     } = this.props;
 
-    let lastRow = 0;
     let shownStatementList = [];
-    let shownStatementIndexList = []
 
     if (statementList.length > 0) {
       let foldedCount = 0;
