@@ -17,13 +17,19 @@ export default class EditorBody extends React.Component {
       onFocusStatement
     } = this.props;
 
-    let lastRow = 1;
-    let hiddenStatementIndexList = [];
+    let lastRow = 0;
+    let shownStatementList = [];
+    let shownStatementIndexList = []
 
     if (statementList.length > 0) {
+      let foldedCount = 0;
       statementList.map((statement, i) => {
-        if (statement.children && statement.children.length > 0) {
-          hiddenStatementIndexList = hiddenStatementIndexList.concat(statement.children.map(v => (v + i + 1)));
+        if (foldedCount > 0) foldedCount -= 1;
+        else {
+          shownStatementList.push(Object.assign(statement, { row: i + 1 }));
+          if (statement.children && statement.children.length > 0) {
+            foldedCount = statement.children.length;
+          }
         }
         return null;
       });
@@ -32,51 +38,44 @@ export default class EditorBody extends React.Component {
     return (
       <div style={{ display: 'flex', flexDirection: 'row', width: '100%', height: '100%', overflowX: 'hidden', overflowY: 'scroll' }}>
         <div style={{ height: statementList.length * 30 + 800, position: 'relative', width: 50, borderWidth: '0px 1px 0px 0px', borderStyle: 'solid', borderColor: '#808080', color: '#808080' }}>
-          {statementList && statementList.map((statement, i) => {
-            if (hiddenStatementIndexList.indexOf(i + 1) === -1) {
-              return (<div key={i} style={{ fontSize: 10, fontStyle: 'normal', paddingTop: 10, height: 30, color: '#cdcdcd', textAlign: 'center' }}>{i + 1}</div>);
-            }
-            return (null);
+          {shownStatementList && shownStatementList.map((statement, i) => {
+            return (<div key={i} style={{ fontSize: 10, fontStyle: 'normal', paddingTop: 10, height: 30, color: '#cdcdcd', textAlign: 'center' }}>{statement.row}</div>);
           })}
         </div>
         <div style={{ flex: 1, overflowX: 'scroll', overflowY: 'hidden' }}>
-          {statementList && statementList.map((statement, i) => {
-            if (hiddenStatementIndexList.indexOf(i + 1) === -1) {
-              lastRow = i + 1;
-              return (
-                <div key={i}>
-                  <LineSpace
-                    row={i + 1}
-                    spaceWidth={50}
-                    spaceHeight={5}
-                    maxColumn={i > 0 ? statementList[i - 1].type === 'condition' ? statementList[i - 1].column + 1 : statementList[i - 1].column : 1}
-                    onDropStatement={onDropStatement}
-                  />
-                  <Statement
-                    row={i + 1}
-                    column={statement.column}
-                    columnWidth={50}
-                    lineHeight={25}
-                    statement={statement}
-                    selectedRow={selectedRow}
-                    onBeginDrag={onBeginDrag}
-                    onClickFold={onClickFold}
-                    onClickStatement={onClickStatement}
-                    onChangeParam={onChangeParam}
-                    onClickRemoveStatement={onClickRemoveStatement}
-                    onFocusStatement={onFocusStatement}
-                    foldable={statementList[i + 1] && statementList[i + 1].column === statement.column + 1}
-                  />
-                </div>
-              );
-            }
-            return (null);
+          {shownStatementList && shownStatementList.map((statement, i) => {
+            return (
+              <div key={i}>
+                <LineSpace
+                  row={statement.row}
+                  spaceWidth={50}
+                  spaceHeight={5}
+                  maxColumn={i > 0 ? shownStatementList[i - 1].type === 'condition' ? shownStatementList[i - 1].column + 1 : shownStatementList[i - 1].column : 1}
+                  onDropStatement={onDropStatement}
+                />
+                <Statement
+                  row={statement.row}
+                  column={statement.column}
+                  columnWidth={50}
+                  lineHeight={25}
+                  statement={statement}
+                  selectedRow={selectedRow}
+                  onBeginDrag={onBeginDrag}
+                  onClickFold={onClickFold}
+                  onClickStatement={onClickStatement}
+                  onChangeParam={onChangeParam}
+                  onClickRemoveStatement={onClickRemoveStatement}
+                  onFocusStatement={onFocusStatement}
+                  foldable={statementList[statement.row] && statementList[statement.row].column === statement.column + 1}
+                />
+              </div>
+            );
           })}
           <LineSpace
             row={statementList.length ? statementList.length + 1 : 1}
             spaceWidth={50}
             spaceHeight={800}
-            maxColumn={statementList.length ? (statementList[lastRow - 1].type === 'condition' ? statementList[lastRow - 1].column + 1 : statementList[lastRow - 1].column) : 1}
+            maxColumn={shownStatementList.length ? (shownStatementList[shownStatementList.length - 1].type === 'condition' ? shownStatementList[shownStatementList.length - 1].column + 1 : shownStatementList[shownStatementList.length - 1].column) : 1}
             onDropStatement={onDropStatement}
           />
         </div>

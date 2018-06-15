@@ -38,7 +38,9 @@ class LineSpaceColumn extends React.Component {
           userSelect: 'none'
         }}
       >
-        {isOver ? '=>' : ''}
+        {/* <div style={{ border: '1px solid black' }}> */}
+          {isOver ? '=>' : ''}
+        {/* </div> */}
       </div>
     );
   }
