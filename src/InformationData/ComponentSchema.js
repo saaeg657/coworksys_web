@@ -231,29 +231,6 @@ export default {
         }
       }
     },
-    questionFromUser: {
-      name: 'questionFromUser',
-      type: 'condition',
-      comment: '사용자에게 질문에 입력된 내용을 질문하는 알림창을 생성합니다. 입력된 시간만큼 유지되면 만료 시 선택에 따라 다음 행동이 수행됩니다.',
-      parameters: {
-        input1: {
-          type: 'String',
-          comment: '질문',
-          isRequired: 'true'
-        },
-        input2: {
-          type: 'Number',
-          comment: '0 ~ 360(초)',
-          range: [0, 360],
-          isRequired: 'true'
-        },
-        option: {
-          type: 'Boolean',
-          options: [true, false],
-          isRequired: 'true'
-        }
-      }
-    },
     isThere: {
       name: 'isThere',
       type: 'condition',

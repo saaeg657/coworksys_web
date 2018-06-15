@@ -10,8 +10,8 @@ const styles = {
   root: {
     width: '100%',
     // maxWidth: '100vw',
-    height: 'calc(100% - 100px)',
-    maxHeight: 'calc(100vh - 100px)',
+    height: 'calc(100% - 150px)',
+    maxHeight: 'calc(100vh - 150px)',
     // minWidth: 1000,
     // maxHeight: 1100,
     display: 'flex',
@@ -102,7 +102,7 @@ class TextEditor extends React.Component {
   }
 
   onClickStatement(row) {
-    var newStatementList = [...this.state.statementList];
+    var newStatementList = this.state.statementList.slice();
     if (this.state.selectedRow > 0 && newStatementList[this.state.selectedRow - 1]) newStatementList[this.state.selectedRow - 1].isSelected = false;
     newStatementList[row - 1].isSelected = true;
     this.setState({
@@ -129,7 +129,7 @@ class TextEditor extends React.Component {
   // drag한 statement를 해당 (row, column) 좌표에 drop
   // drag한 statement가 if/else이고 statement들을 포함한 상태로 folded 되어 drop하였다면 그 statement들까지 같이 이동
   onDropStatement(row, column) {
-    var newStatementList = [...this.state.statementList];
+    var newStatementList = this.state.statementList.slice();
     var newStatement = Object.assign({}, this.state.draggedStatement);
     newStatement.column = column;
     // drag한 statement가 editor 안에 삽입된 statement인 경우
@@ -167,7 +167,7 @@ class TextEditor extends React.Component {
   // fold 아이콘 클릭시 trigger되는 함수
   // if/else 안에 들어있는 statement들을 접음
   onClickFold(row) {
-    var newStatementList = [...this.state.statementList];
+    var newStatementList = this.state.statementList.slice();
     var newStatement = Object.assign({}, newStatementList[row - 1]);
     newStatement.children = [];
     if (newStatement.isFolded) {
@@ -211,7 +211,7 @@ class TextEditor extends React.Component {
   // 해당 statement 1개를 삭제하는 버튼을 클릭 시 trigger되는 함수
   onClickRemoveStatement(e, row) {
     e.stopPropagation();
-    var newStatementList = [...this.state.statementList];
+    var newStatementList = this.state.statementList.slice();
     var newSelectedRow = this.state.selectedRow;
     newStatementList.splice(row - 1, 1);
     newStatementList = this.adjustColumn(newStatementList);
@@ -227,7 +227,7 @@ class TextEditor extends React.Component {
   // statement detail 부분과 에디터의 statement 두곳 중 한곳을 변경해도 모두 변경
   onChangeParam(name, value) {
     if (!this.isValidParam(this.state.statementList[this.state.selectedRow - 1].parameters[name], value)) return;
-    var newStatementList = [...this.state.statementList];
+    var newStatementList = this.state.statementList.slice();
     var newStatement = Object.assign({},
       newStatementList[this.state.selectedRow - 1], {
         parameters: Object.assign({},

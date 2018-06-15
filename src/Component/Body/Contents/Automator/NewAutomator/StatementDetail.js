@@ -57,7 +57,7 @@ class Component extends React.Component {
         return (
           <div>
             <select
-              style={{ height: 20 }}
+              style={{ height: 20, fontSize: 15 }}
               name={param}
               value={statement.parameters[param].value}
               onChange={(e) => this.props.onChangeParam(e.target.name, e.target.value)}
@@ -69,7 +69,7 @@ class Component extends React.Component {
       default:
         return (
           <input
-            style={{ width: '100%', height: 20 }}
+            style={{ width: '100%', height: 20, fontSize: 15 }}
             type='text'
             name={param}
             value={statement.parameters[param].value}
@@ -88,9 +88,9 @@ class Component extends React.Component {
       <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', fontSize: 20, textAlign: 'center', opacity: isDragging ? 0.3 : 1 }}>
         <div style={{ display: 'flex', flexDirection: 'row', flex: 1 }}>
           {/* component name */}
-          <div style={{ flex: 1, margin: 'auto', fontSize: 30 }}>{statement && statement.name}</div>
+          <div style={{ flex: 1, margin: 'auto', fontSize: 30, padding: 5 }}>{statement && statement.name}</div>
           {/* component comment */}
-          <div style={{ flex: 3, margin: 'auto' }}>{statement && statement.comment}</div>
+          <div style={{ flex: 3, margin: 'auto', padding: 5 }}>{statement && statement.comment}</div>
         </div>
         <div style={{ display: 'flex', flexDirection: 'row', flex: 1 }}>
           {/* component input1 label */}
