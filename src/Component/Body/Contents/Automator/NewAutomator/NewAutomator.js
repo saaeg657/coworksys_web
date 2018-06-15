@@ -13,7 +13,7 @@ export default class NewAutomator extends React.Component {
             Groupinfo: [],
             AutomatorName: "",
             osType: "",
-            Command: "",
+            Commands: [],
             SelectedGroup: -1,
             SelectedGroupName: "",
             hover: "",
@@ -30,6 +30,7 @@ export default class NewAutomator extends React.Component {
         this.mouseOver = this.mouseOver.bind(this);
         this.showPopup = this.showPopup.bind(this);
         this.resultFromPopup = this.resultFromPopup.bind(this);
+        this.onChangeCommands = this.onChangeCommands.bind(this);
     }
     resultFromPopup(name, groupID) {
         var ostype = "";
@@ -149,6 +150,14 @@ export default class NewAutomator extends React.Component {
 
     }
 
+    // TODO: Commands should be parsed into json
+    onChangeCommands(Commands) {
+        console.log(Commands);
+        this.setState({
+            Commands
+        });
+    }
+
     render() {
 
         let html = <div className="div-localuser" style={{ position: "fixed", width: "100%" }}>
@@ -195,47 +204,10 @@ export default class NewAutomator extends React.Component {
                                     </div>
                                 </div>
                                 <div className="div-block-26">
-                                    <Editor />
+                                    <Editor
+                                        onChangeCommands={this.onChangeCommands}
+                                    />
                                 </div>
-                                {/* <div className="div-block-26">
-                                    <textarea className="textarea-3 w-input" id="field" onChange={this.changeCommand} maxLength={5000} name="field" defaultValue={""}
-                                        style={{
-                                            height: "60%",
-                                            width: "100%",
-                                        }} />
-                                    <div className="div-block-28"
-                                        style={{ width: 330, height: 915, float: "right" }}>
-                                        <input style={{ maxWidth: 250, width: 250, height: 28, marginLeft: 45, marginTop: 25, borderBottomLeftRadius: 15, borderTopLeftRadius: 15 }}
-                                            type="text" id="name-5" name="name-5" data-name="Name 5" placeholder="검색" maxLength={256}
-                                            className="form-search-input w-input" />
-                                        <div className="div-block-29"><img className="image-7" src="../images/groupunfold.png" width={10} />
-                                            <div>IF</div>
-                                        </div>
-                                        <div className="div-block-30">
-                                            <div>else</div>
-                                            <div>is app running</div>
-                                            <div>is service running</div>
-                                            <div>is OS</div>
-                                        </div>
-                                        <div className="div-block-29"><img className="image-7" src="../images/groupunfold.png" width={10} />
-                                            <div>CMD</div>
-                                        </div>
-                                        <div className="div-block-30">
-                                            <div>else</div>
-                                            <div>is app running</div>
-                                            <div>is service running</div>
-                                            <div>is OS</div>
-                                        </div>
-                                        <div className="div-block-29"><img className="image-7" src="../images/groupunfold.png" width={10} />
-                                            <div>Variables</div>
-                                        </div>
-                                        <div className="div-block-30">
-                                            <div>@input</div>
-                                            <div>@alert</div>
-                                            <div>@output</div>
-                                        </div>
-                                    </div>
-                                </div> */}
                             </form>
                         </div>
                     </div>

@@ -161,6 +161,8 @@ class TextEditor extends React.Component {
     this.setState({
       statementList: newStatementList,
       selectedRow: this.getSelectedRow(newStatementList)
+    }, () => {
+      this.props.onChangeCommands(this.state.statementList);
     });
   }
 
@@ -219,6 +221,8 @@ class TextEditor extends React.Component {
     this.setState({
       statementList: newStatementList,
       selectedRow: newSelectedRow
+    }, () => {
+      this.props.onChangeCommands(this.state.statementList);
     });
   }
 
@@ -248,6 +252,8 @@ class TextEditor extends React.Component {
     newStatementList[this.state.selectedRow - 1] = newStatement;
     this.setState({
       statementList: newStatementList,
+    }, () => {
+      this.props.onChangeCommands(this.state.statementList);
     });
   }
 
