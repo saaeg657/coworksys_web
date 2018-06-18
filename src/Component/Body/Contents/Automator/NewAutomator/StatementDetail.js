@@ -26,8 +26,7 @@ class Component extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      statement: this.props.statement ? this.props.statement : {},
-      isEtc: false
+      isOpenMessageBox: false
     };
   }
 
@@ -55,15 +54,36 @@ class Component extends React.Component {
         );
       case 'Selection':
         return (
-          <div>
+          <div style={{ display: 'flex', flexDirection: 'row', width: '100%', height: 20 }}>
             <select
-              style={{ height: 20, fontSize: 15 }}
+              style={{ width: 200, fontSize: 15 }}
               name={param}
               value={statement.parameters[param].value}
-              onChange={(e) => this.props.onChangeParam(e.target.name, e.target.value)}
+              onChange={(e) => this.props.onChangeParam(e.target.name, 'value', e.target.value)}
             >
               {statement.parameters[param].options && statement.parameters[param].options.map(((v, i) => <option key={i} value={v}>{String(v)}</option>))}
             </select>
+          </div>
+        );
+      case 'Message':
+        return (
+          <div style={{ display: 'flex', flexDirection: 'row', width: '100%', height: 20 }}>
+            <select
+              style={{ width: 200, fontSize: 15 }}
+              name={param}
+              value={statement.parameters[param].isNull}
+              onChange={(e) => this.props.onChangeParam(e.target.name, 'isNull', e.target.value)}
+            >
+              {statement.parameters[param].options && statement.parameters[param].options.map(((v, i) => <option key={i} value={v === '없음' ? true : false}>{String(v)}</option>))}
+            </select>
+            {statement.parameters[param].isNull === 'false' && <input
+              style={{ flex: 1, fontSize: 15, marginLeft: 10 }}
+              type='text'
+              name={param}
+              value={statement.parameters[param].message}
+              onChange={(e) => this.props.onChangeParam(e.target.name, 'value', e.target.value)}
+              placeholder='메시지 입력'
+            />}
           </div>
         );
       default:
@@ -74,7 +94,7 @@ class Component extends React.Component {
             name={param}
             value={statement.parameters[param].value}
             disabled={statement.parameters[param].type === 'Fixed' ? true : false}
-            onChange={(e) => this.props.onChangeParam(e.target.name, e.target.value)}
+            onChange={(e) => this.props.onChangeParam(e.target.name, 'value', e.target.value)}
             placeholder={statement.parameters[param].comment}
           />
         );

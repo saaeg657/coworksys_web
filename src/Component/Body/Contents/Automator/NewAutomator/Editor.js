@@ -229,7 +229,7 @@ class TextEditor extends React.Component {
   // statement 안의 input들의 값을 변경 시 trigger되는 함수
   // statement detail과 에디터의 statement 두 component에 모두 props로 전달
   // statement detail 부분과 에디터의 statement 두곳 중 한곳을 변경해도 모두 변경
-  onChangeParam(name, value) {
+  onChangeParam(name, field, value) {
     if (!this.isValidParam(this.state.statementList[this.state.selectedRow - 1].parameters[name], value)) return;
     var newStatementList = this.state.statementList.slice();
     var newStatement = Object.assign({},
@@ -237,7 +237,9 @@ class TextEditor extends React.Component {
         parameters: Object.assign({},
           newStatementList[this.state.selectedRow - 1].parameters, {
             [name] : Object.assign({},
-              newStatementList[this.state.selectedRow - 1].parameters[name], { value }) 
+              newStatementList[this.state.selectedRow - 1].parameters[name], {
+                [field]: value
+              }) 
           })});
     // var newStatement = {
     //   ...newStatementList[this.state.selectedRow - 1],

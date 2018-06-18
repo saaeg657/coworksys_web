@@ -153,11 +153,29 @@ class Statement extends React.Component {
                           style={{ margin: '0px 5px 0px 5px' }}
                           name={param}
                           value={statement.parameters[param].value}
-                          onChange={(e) => onChangeParam(e.target.name, e.target.value)}
+                          onChange={(e) => onChangeParam(e.target.name, 'value', e.target.value)}
                           onFocus={() => onFocusStatement(row)}
                         >
                           {statement.parameters[param].options.map((option, j) => {
                             return (<option key={j} value={option}>{String(option)}</option>);
+                          })}
+                        </select>
+                      </span>
+                    );
+                  }
+                  case 'Message': {
+                    return (
+                      <span key={i}>
+                        <span>{i !== 0 ? ', ' : ''}</span>
+                        <select
+                          style={{ margin: '0px 5px 0px 5px' }}
+                          name={param}
+                          value={statement.parameters[param].isNull}
+                          onChange={(e) => onChangeParam(e.target.name, 'isNull', e.target.value)}
+                          onFocus={() => onFocusStatement(row)}
+                        >
+                          {statement.parameters[param].options.map((option, j) => {
+                            return (<option key={j} value={option === '없음' ? true : false}>{String(option)}</option>);
                           })}
                         </select>
                       </span>
@@ -173,7 +191,7 @@ class Statement extends React.Component {
                           name={param}
                           value={statement.parameters[param].value}
                           disabled={statement.parameters[param].type === 'Fixed' ? true : false}
-                          onChange={(e) => onChangeParam(e.target.name, e.target.value)}
+                          onChange={(e) => onChangeParam(e.target.name, 'value', e.target.value)}
                           onFocus={() => onFocusStatement(row)}
                           placeholder={statement.parameters[param].comment}
                           size={statement.parameters[param].comment && statement.parameters[param].comment.length > 30 ? statement.parameters[param].comment.length + 10 : 30}

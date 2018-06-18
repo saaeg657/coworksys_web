@@ -33,31 +33,6 @@ export default {
         }
       }
     },
-    eval: {
-      name: 'eval',
-      type: 'condition',
-      comment: '입력된 값을 연산 또는 평가한 후에 값과 Option의 항목으로 비교한다.',
-      parameters: {
-        input1: {
-          name: '입력',
-          type: 'Number',
-          comment: '입력',
-          isRequired: 'true'
-        },
-        input2: {
-          name: '대상',
-          type: 'Number',
-          comment: '대상',
-          isRequired: 'true'
-        },
-        option: {
-          name: '신택',
-          type: 'Selection',
-          options: ['크다', '크거나 같다', '같다', '작다', '작거나 같다'],
-          isRequired: 'true'
-        }
-      }
-    },
     getOS: {
       name: 'getOS',
       type: 'condition',
@@ -384,9 +359,10 @@ export default {
         },
         option: {
           name: '선택',
-          type: 'Selection',
+          type: 'Message',
           comment: '경고문의 내용을 입력할 수 있는 새 창을 띄웁니다.',
-          options: ['없음', '경고문 생성']
+          options: ['없음', '경고문 생성'],
+          isRequired: 'true'
         }
       }
     },
@@ -410,9 +386,10 @@ export default {
         },
         option: {
           name: '선택',
-          type: 'Selection',
+          type: 'Message',
           comment: '경고문의 내용을 입력할 수 있는 새 창을 띄웁니다.',
-          options: ['없음', '경고문 생성']
+          options: ['없음', '경고문 생성'],
+          isRequired: 'true'
         }
       }
     }
@@ -517,9 +494,9 @@ export default {
         },
         option: {
           name: '선택',
-          type: 'Selection',
-          options: ['없음', '경고문 생성'],
+          type: 'Message',
           comment: '경고문의 내용을 입력할 수 있는 새 창을 띄웁니다.',
+          options: ['없음', '경고문 생성'],
           isRequired: 'true'
         }
       }
@@ -544,9 +521,9 @@ export default {
         },
         option: {
           name: '선택',
-          type: 'Selection',
-          options: ['없음', '경고문 생성'],
+          type: 'Message',
           comment: '경고문의 내용을 입력할 수 있는 새 창을 띄웁니다.',
+          options: ['없음', '경고문 생성'],
           isRequired: 'true'
         }
       }
@@ -571,9 +548,9 @@ export default {
         },
         option: {
           name: '선택',
-          type: 'Selection',
-          options: ['없음', '경고문 생성'],
+          type: 'Message',
           comment: '경고문의 내용을 입력할 수 있는 새 창을 띄웁니다.',
+          options: ['없음', '경고문 생성'],
           isRequired: 'true'
         }
       }
