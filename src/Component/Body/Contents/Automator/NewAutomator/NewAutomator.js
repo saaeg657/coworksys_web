@@ -150,7 +150,6 @@ export default class NewAutomator extends React.Component {
 
     }
 
-    // TODO: Commands should be parsed into json
     onChangeCommands(Commands) {
         this.setState({
             Commands: this.parseCommands(Commands)
@@ -165,7 +164,8 @@ export default class NewAutomator extends React.Component {
         var currentCommand = {};
         Commands.map((command, i) => {
             if (depth === command.column) {
-                columnArray[columnArray.length - 1] += 1;
+                depth = command.column;
+                columnArray[depth - 1] += 1;
             } else if (depth < command.column) {
                 depth = command.column;
                 columnArray.push(1);

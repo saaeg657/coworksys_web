@@ -81,7 +81,7 @@ class Statement extends React.Component {
       onChangeParam,
       onFocusStatement
     } = this.props;
-
+    let index = -1;
     return (
       <div
         style={{ height: lineHeight, padding: '2.5px 5px 2.5px 5px', width: 1200 + (column - 1) * columnWidth }}
@@ -138,17 +138,19 @@ class Statement extends React.Component {
                   case 'Null':
                     return (null);
                   case 'Fixed': {
+                    index += 1;
                     return (
                       <span key={i}>
-                        <span>{i !== 0 ? ', ' : ''}</span>
+                        <span>{index !== 0 ? ', ' : ''}</span>
                         <span style={{ color: '#4a8f55' }}>"{statement.parameters[param].value}"</span>
                       </span>
                     );
                   }
                   case 'Selection': {
+                    index += 1;
                     return (
                       <span key={i}>
-                        <span>{i !== 0 ? ', ' : ''}</span>
+                        <span>{index !== 0 ? ', ' : ''}</span>
                         <select
                           style={{ margin: '0px 5px 0px 5px' }}
                           name={param}
@@ -164,9 +166,10 @@ class Statement extends React.Component {
                     );
                   }
                   case 'Message': {
+                    index += 1;
                     return (
                       <span key={i}>
-                        <span>{i !== 0 ? ', ' : ''}</span>
+                        <span>{index !== 0 ? ', ' : ''}</span>
                         <select
                           style={{ margin: '0px 5px 0px 5px' }}
                           name={param}
@@ -182,9 +185,10 @@ class Statement extends React.Component {
                     );
                   }
                   default: {
+                    index += 1;
                     return (
                       <span key={i}>
-                        <span>{i !== 0 ? ', ' : ''}</span>
+                        <span>{index !== 0 ? ', ' : ''}</span>
                         <input
                           style={{ border: '1px solid black', borderRadius: 3, margin: '0px 5px 0px 5px' }}
                           type='text'
