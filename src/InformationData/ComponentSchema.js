@@ -17,18 +17,21 @@ export default {
           name: '입력',
           type: 'String',
           comment: '입력',
+          value: '',
           isRequired: 'true'
         },
         input2: {
           name: '대상',
           type: 'Number',
           comment: '대상',
+          value: '',
           isRequired: 'true'
         },
         option: {
           name: '선택',
           type: 'Selection',
           options: ['크다', '크거나 같다', '같다', '작다', '작거나 같다'],
+          value: '같다',
           isRequired: 'true'
         }
       }
@@ -42,6 +45,7 @@ export default {
           name: '입력',
           type: 'String',
           comment: '입력',
+          value: '',
           isRequired: 'true'
         },
         input2: {
@@ -55,6 +59,7 @@ export default {
           name: '선택',
           type: 'Selection',
           options: ['같다', '다르다'],
+          value: '같다',
           isRequired: 'true'
         }
       }
@@ -68,6 +73,7 @@ export default {
           name: '입력',
           type: 'Number',
           comment: '입력',
+          value: '',
           isRequired: 'true'
         },
         input2: {
@@ -81,6 +87,7 @@ export default {
           name: '선택',
           type: 'Selection',
           options: ['크다', '크거나 같다', '같다', '작다', '작거나 같다'],
+          value: '같다',
           isRequired: 'true'
         }
       }
@@ -94,18 +101,21 @@ export default {
           name: '입력',
           type: 'String',
           comment: '레지스트리의 값',
+          value: '',
           isRequired: 'true'
         },
         input2: {
           name: '대상',
           type: 'String',
           comment: '레지스트리의 경로',
+          value: '',
           isRequired: 'true'
         },
         option: {
           name: '선택',
           type: 'Selection',
           options: ['크다', '크거나 같다', '같다', '작다', '작거나 같다'],
+          value: '같다',
           isRequired: 'true'
         }
       }
@@ -119,18 +129,21 @@ export default {
           name: '입력',
           type: 'String',
           comment: '어플리케이션 이름',
+          value: '',
           isRequired: 'true'
         },
         input2: {
           name: '대상',
           type: 'Fixed',
           comment: '고정 값',
+          value: '',
           value: '에이전트가 설치된 컴퓨터에서 실행 중인 어플리케이션 중'
         },
         option: {
           name: '선택',
           type: 'Selection',
           options: ['실행 중', '해당 사항 없음'],
+          value: '해당 사항 없음',
           isRequired: 'true'
         }
       }
@@ -144,6 +157,7 @@ export default {
           name: '입력',
           type: 'String',
           comment: '서비스 이름',
+          value: '',
           isRequired: 'true'
         },
         input2: {
@@ -151,12 +165,14 @@ export default {
           type: 'Fixed',
           comment: '고정 값',
           value: '에이전트가 설치된 컴퓨터에서 실행 준인 서비스 중',
+          value: '',
           isRequired: 'ture'
         },
         option: {
           name: '선택',
           type: 'Selection',
           options: ['실행 중', '해당 사항 없음'],
+          value: '',
           isRequired: 'true'
         }
       }
@@ -179,6 +195,7 @@ export default {
           name: '선택',
           type: 'Selection',
           options: ['사용 중', '해당 사항 없음'],
+          value: '해당 사항 없음',
           isRequired: 'true'
         }
       }
@@ -193,15 +210,20 @@ export default {
           name: '입력',
           type: 'String',
           comment: '사용자의 이름',
+          value: '',
           isRequired: 'false'
         },
         input2: {
-          type: 'Null'
+          name: '대상',
+          type: 'Fixed',
+          value: '에이전트가 설치된 컴퓨터의 현재 사용자',
+          comment: '고정 값'
         },
         option: {
           name: '선택',
           type: 'Selection',
           options: ['사용 중', '해당 사항 없음'],
+          value: '해당 사항 없음',
           isRequired: 'true'
         }
       }
@@ -215,18 +237,21 @@ export default {
           name: '입력',
           type: 'String',
           comment: '대상의 이름(확장자 포함)',
+          value: '',
           isRequired: 'true'
         },
         input2: {
           name: '대상',
           type: 'String',
           comment: '대상의 경로',
+          value: '',
           isRequired: 'true'
         },
         option: {
           name: '선택',
           type: 'Selection',
           options: ['있다', '없다'],
+          value: '없다',
           isRequired: 'true'
         }
       }
@@ -241,6 +266,7 @@ export default {
           type: 'Number',
           comment: '단위 : %',
           range: [0, 100],
+          value: '0',
           isRequired: 'true'
         },
         input2: {
@@ -254,6 +280,7 @@ export default {
           name: '선택',
           type: 'Selection',
           options: ['크다', '크거나 같다', '같다', '작다', '작거나 같다'],
+          value: '같다',
           isRequired: 'true'
         }
       }
@@ -267,6 +294,7 @@ export default {
           name: '입력',
           type: 'Number',
           comment: '단위 : KB/초',
+          value: '0',
           isRequired: 'true'
         },
         input2: {
@@ -280,6 +308,7 @@ export default {
           name: '선택',
           type: 'Selection',
           options: ['크다', '크거나 같다', '같다', '작다', '작거나 같다'],
+          value: '같다',
           isRequired: 'true'
         }
       }
@@ -293,6 +322,7 @@ export default {
           name: '입력',
           type: 'Number',
           comment: '단위 : KB/초',
+          value: '0',
           isRequired: 'true'
         },
         input2: {
@@ -306,6 +336,7 @@ export default {
           name: '선택',
           type: 'Selection',
           options: ['크다', '크거나 같다', '같다', '작다', '작거나 같다'],
+          value: '같다',
           isRequired: 'true'
         }
       }
@@ -320,6 +351,7 @@ export default {
           type: 'Number',
           comment: '단위 : %',
           range: [0, 100],
+          value: '0',
           isRequired: 'true'
         },
         input2: {
@@ -333,6 +365,7 @@ export default {
           name: '선택',
           type: 'Selection',
           options: ['크다', '크거나 같다', '같다', '작다', '작거나 같다'],
+          value: '같드',
           isRequired: 'true'
         }
       }
@@ -348,6 +381,7 @@ export default {
           name: '입력',
           type: 'String',
           comment: '설치할 파일의 전체 경로를 입력해주세요.',
+          value: '',
           isRequired: 'true'
         },
         input2: {
@@ -362,6 +396,7 @@ export default {
           type: 'Message',
           comment: '경고문의 내용을 입력할 수 있는 새 창을 띄웁니다.',
           options: ['없음', '경고문 생성'],
+          value: '없음',
           isRequired: 'true'
         }
       }
@@ -375,6 +410,7 @@ export default {
           name: '입력',
           type: 'String',
           comment: '설치할 파일의 전체 경로를 입력해주세요.',
+          value: '',
           isRequired: 'true'
         },
         input2: {
@@ -389,6 +425,7 @@ export default {
           type: 'Message',
           comment: '경고문의 내용을 입력할 수 있는 새 창을 띄웁니다.',
           options: ['없음', '경고문 생성'],
+          value: '없음',
           isRequired: 'true'
         }
       }
@@ -404,6 +441,7 @@ export default {
           name: '입력',
           type: 'String',
           comment: 'Shell Script Command',
+          value: '',
           isRequired: 'true'
         },
         input2: {
@@ -417,6 +455,7 @@ export default {
           name: '선택',
           type: 'Selection',
           options: ['Windows', 'macOS', 'Others'],
+          value: 'Windows',
           isRequired: 'true'
         }
       }
@@ -430,6 +469,7 @@ export default {
           name: '입력',
           type: 'String',
           comment: 'Power Shell Script Command',
+          value: '',
           isRequired: 'true'
         },
         input2: {
@@ -443,6 +483,7 @@ export default {
           name: '선택',
           type: 'Selection',
           options: ['Windows', 'macOS', 'Others'],
+          value: 'Windows',
           isRequired: 'true'
         }
       }
@@ -470,6 +511,7 @@ export default {
           name: '선택',
           type: 'Selection',
           options: ['Windows', 'macOS', 'Others'],
+          value: 'Windows',
           isRequired: 'true'
         }
       }
@@ -483,6 +525,7 @@ export default {
           name: '입력',
           type: 'Number',
           comment: '단위 : 초',
+          value: '0',
           isRequired: 'true'
         },
         input2: {
@@ -497,6 +540,7 @@ export default {
           type: 'Message',
           comment: '경고문의 내용을 입력할 수 있는 새 창을 띄웁니다.',
           options: ['없음', '경고문 생성'],
+          value: '없음',
           isRequired: 'true'
         }
       }
@@ -510,6 +554,7 @@ export default {
           name: '입력',
           type: 'Number',
           comment: '단위 : 초',
+          value: '0',
           isRequired: 'true'
         },
         input2: {
@@ -524,6 +569,7 @@ export default {
           type: 'Message',
           comment: '경고문의 내용을 입력할 수 있는 새 창을 띄웁니다.',
           options: ['없음', '경고문 생성'],
+          value: '없음',
           isRequired: 'true'
         }
       }
@@ -537,6 +583,7 @@ export default {
           name: '입력',
           type: 'Number',
           comment: '단위 : 초',
+          value: '0',
           isRequired: 'true'
         },
         input2: {
@@ -551,6 +598,7 @@ export default {
           type: 'Message',
           comment: '경고문의 내용을 입력할 수 있는 새 창을 띄웁니다.',
           options: ['없음', '경고문 생성'],
+          value: '없음',
           isRequired: 'true'
         }
       }
@@ -564,6 +612,7 @@ export default {
           name: '입력',
           type: 'String',
           comment: '메시지의 내용을 입력합니다.',
+          value: '',
           isRequired: 'true'
         },
         input2: {
@@ -586,12 +635,15 @@ export default {
           name: '입력',
           type: 'String',
           comment: '메일의 내용',
+          value: '',
           isRequired: 'true'
         },
         input2: {
           name: '대상',
           type: 'String',
           comment: '받을 사람의 주소(\',\'로 구분하여 여러명에게 전송)',
+          value: '',
+          isRequired: 'true'
         },
         option: {
           type: 'Null'
@@ -607,18 +659,21 @@ export default {
           name: '입력',
           type: 'String',
           comment: '사용자의 이름',
+          value: '',
           isRequired: 'true'
         },
         input2: {
           name: '입력',
           type: 'String',
           comment: '사용자의 비밀번호',
+          value: '',
           isRequired: 'true'
         },
         option: {
           name: '선택',
           type: 'Selection',
           options: ['관리자', '일반 사용자'],
+          value: '일반 사용자',
           isRequired: 'true'
         }
       }
@@ -632,6 +687,7 @@ export default {
           name: '입력',
           type: 'String',
           comment: '사용자의 이름',
+          value: '',
           isRequired: 'true'
         },
         input2: {
@@ -655,18 +711,21 @@ export default {
           name: '입력',
           type: 'String',
           comment: '지정 사용자',
+          value: '',
           isRequired: 'false'
         },
         input2: {
           name: '입력',
           type: 'Number',
           comment: '단위 : 초',
+          value: '0',
           isRequired: 'true'
         },
         option: {
           name: '선택',
           type: 'Selection',
           options: ['없음', '경고문 생성'],
+          value: '없음',
           isRequired: 'true'
         }
       }

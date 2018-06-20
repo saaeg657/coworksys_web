@@ -152,10 +152,54 @@ export default class NewAutomator extends React.Component {
 
     // TODO: Commands should be parsed into json
     onChangeCommands(Commands) {
-        console.log(Commands);
         this.setState({
-            Commands
+            Commands: this.parseCommands(Commands)
         });
+    }
+
+    parseCommands(Commands) {
+        if (!Commands || Commands.length === 0) return;
+        var parsedCommands = [];
+        let columnArray = [0];
+        let depth = 1;
+        var currentCommand = {};
+        Commands.map((command, i) => {
+            if (depth === command.column) {
+                columnArray[columnArray.length - 1] += 1;
+            } else if (depth < command.column) {
+                depth = command.column;
+                columnArray.push(1);
+            } else {
+                depth = command.column;
+                columnArray[depth - 1] += 1;
+            }
+
+            currentCommand = parsedCommands;
+            for (let j = 0; j < depth; ++j) {
+                if (j > 0) {
+                    if (!currentCommand.commands[columnArray[j] - 1]) currentCommand.commands.push({});
+                    currentCommand = currentCommand.commands[columnArray[j] - 1];
+                }
+                else {
+                    if (!currentCommand[columnArray[j]- 1]) currentCommand.push({});
+                    currentCommand = currentCommand[columnArray[j]- 1];
+                }
+            }
+            currentCommand.type = command.type;
+            currentCommand.name = command.name;
+            currentCommand.parameters = {};
+            Object.keys(command.parameters).map((param) => {
+                currentCommand.parameters[param] = '';
+                currentCommand.parameters[param] = command.parameters[param].value;
+                return null;
+            });
+            if (currentCommand.type === 'condition') {
+                currentCommand.commands = [];
+            }
+            return null
+        });
+        console.log(parsedCommands);
+        return parsedCommands;
     }
 
     render() {
