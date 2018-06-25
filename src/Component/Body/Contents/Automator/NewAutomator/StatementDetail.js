@@ -112,30 +112,16 @@ class Component extends React.Component {
           {/* component comment */}
           <div style={{ flex: 3, margin: 'auto', padding: 5 }}>{statement && statement.comment}</div>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'row', flex: 1 }}>
-          {/* component input1 label */}
-          <div style={{ flex: 1, margin: 'auto' }}>{statement && statement.parameters && statement.parameters.input1.name ? statement.parameters.input1.name : ''}</div>
-          {/* component input1 value */}
-          <div style={{ flex: 3, display: 'flex', alignItems: 'center' }}>
-            {statement && statement.parameters && statement.parameters.input1.type !== 'Null' && this.renderInputField(statement, 'input1')}
-          </div>
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'row', flex: 1 }}>
-          {/* component input2 label */}
-          <div style={{ flex: 1, margin: 'auto' }}>{statement && statement.parameters && statement.parameters.input2.name ? statement.parameters.input2.name : ''}</div>
-          {/* component input2 value */}
-          <div style={{ flex: 3, display: 'flex', alignItems: 'center' }}>
-            {statement && statement.parameters && statement.parameters.input2.type !== 'Null' && this.renderInputField(statement, 'input2')}
-          </div>
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'row', flex: 1 }}>
-          {/* component option label */}
-          <div style={{ flex: 1, margin: 'auto' }}>{statement && statement.parameters && statement.parameters.option.name ? statement.parameters.option.name : ''}</div>
-          {/* component option value */}
-          <div style={{ flex: 3, display: 'flex', alignItems: 'center' }}>
-            {statement && statement.parameters && statement.parameters.option.type !== 'Null' && this.renderInputField(statement, 'option')}
-          </div>
-        </div>
+        {statement && Object.keys(statement.parameters).map((param, i) => {
+          return (<div key={i} style={{ display: 'flex', flexDirection: 'row', flex: 1 }}>
+            {/* component input1 label */}
+            <div style={{ flex: 1, margin: 'auto' }}>{statement.parameters[param].name ? statement.parameters[param].name : ''}</div>
+            {/* component input1 value */}
+            <div style={{ flex: 3, display: 'flex', alignItems: 'center' }}>
+              {param.type !== 'Null' && this.renderInputField(statement, param)}
+            </div>
+          </div>);
+        })}
       </div>
     );
   }

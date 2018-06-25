@@ -20,6 +20,13 @@ export default {
           value: '',
           isRequired: 'true'
         },
+        option: {
+          name: '연산자',
+          type: 'Selection',
+          options: ['>', '>=', '==', '<', '<='],
+          value: '==',
+          isRequired: 'true'
+        },
         input2: {
           name: '대상',
           type: 'Number',
@@ -27,13 +34,6 @@ export default {
           value: '',
           isRequired: 'true'
         },
-        option: {
-          name: '선택',
-          type: 'Selection',
-          options: ['크다', '크거나 같다', '같다', '작다', '작거나 같다'],
-          value: '같다',
-          isRequired: 'true'
-        }
       }
     },
     getOS: {
@@ -41,6 +41,13 @@ export default {
       type: 'condition',
       comment: '입력과 대상을 선택의 항목으로 비교',
       parameters: {
+        option: {
+          name: '연산자',
+          type: 'Selection',
+          options: ['==', '!='],
+          value: '==',
+          isRequired: 'true'
+        },
         input1: {
           name: '입력',
           type: 'String',
@@ -54,13 +61,6 @@ export default {
           comment: '고정 값',
           value: '에이전트가 설치된 컴퓨터의 OS',
           isRequired: 'true'
-        },
-        option: {
-          name: '선택',
-          type: 'Selection',
-          options: ['같다', '다르다'],
-          value: '같다',
-          isRequired: 'true'
         }
       }
     },
@@ -69,6 +69,13 @@ export default {
       type: 'condition',
       comment: '입력과 대상을 선택의 항목으로 비교',
       parameters: {
+        option: {
+          name: '연산자',
+          type: 'Selection',
+          options: ['>', '>=', '==', '<', '<='],
+          value: '==',
+          isRequired: 'true'
+        },
         input1: {
           name: '입력',
           type: 'Number',
@@ -83,13 +90,6 @@ export default {
           value: '에이전트가 설치된 컴퓨터의 Memory',
           isRequired: 'true'
         },
-        option: {
-          name: '선택',
-          type: 'Selection',
-          options: ['크다', '크거나 같다', '같다', '작다', '작거나 같다'],
-          value: '같다',
-          isRequired: 'true'
-        }
       }
     },
     getRegistryValue: {
@@ -104,6 +104,13 @@ export default {
           value: '',
           isRequired: 'true'
         },
+        option: {
+          name: '연산자',
+          type: 'Selection',
+          options: ['>', '>=', '==', '<', '<='],
+          value: '==',
+          isRequired: 'true'
+        },
         input2: {
           name: '대상',
           type: 'String',
@@ -111,13 +118,6 @@ export default {
           value: '',
           isRequired: 'true'
         },
-        option: {
-          name: '선택',
-          type: 'Selection',
-          options: ['크다', '크거나 같다', '같다', '작다', '작거나 같다'],
-          value: '같다',
-          isRequired: 'true'
-        }
       }
     },
     isAppRunning: {
@@ -132,6 +132,13 @@ export default {
           value: '',
           isRequired: 'true'
         },
+        option: {
+          name: '선택',
+          type: 'Selection',
+          options: ['true', 'false'],
+          value: 'false',
+          isRequired: 'true'
+        },
         input2: {
           name: '대상',
           type: 'Fixed',
@@ -139,13 +146,6 @@ export default {
           value: '',
           value: '에이전트가 설치된 컴퓨터에서 실행 중인 어플리케이션 중'
         },
-        option: {
-          name: '선택',
-          type: 'Selection',
-          options: ['실행 중', '해당 사항 없음'],
-          value: '해당 사항 없음',
-          isRequired: 'true'
-        }
       }
     },
     isServiceRunning: {
@@ -160,21 +160,20 @@ export default {
           value: '',
           isRequired: 'true'
         },
+        option: {
+          name: '선택',
+          type: 'Selection',
+          options: ['true', 'false'],
+          value: 'false',
+          isRequired: 'true'
+        },
         input2: {
           name: '대상',
           type: 'Fixed',
           comment: '고정 값',
           value: '에이전트가 설치된 컴퓨터에서 실행 준인 서비스 중',
-          value: '',
           isRequired: 'ture'
         },
-        option: {
-          name: '선택',
-          type: 'Selection',
-          options: ['실행 중', '해당 사항 없음'],
-          value: '',
-          isRequired: 'true'
-        }
       }
     },
     isUserActive: {
@@ -185,19 +184,19 @@ export default {
         input1: {
           type: 'Null'
         },
+        option: {
+          name: '선택',
+          type: 'Selection',
+          options: ['true', 'false'],
+          value: 'false',
+          isRequired: 'true'
+        },
         input2: {
           name: '대상',
           type: 'Fixed',
           value: '에이전트가 설치된 컴퓨터의 현재 사용자',
           comment: '고정 값'
         },
-        option: {
-          name: '선택',
-          type: 'Selection',
-          options: ['사용 중', '해당 사항 없음'],
-          value: '해당 사항 없음',
-          isRequired: 'true'
-        }
       }
     },
     // TODO: 
@@ -213,19 +212,19 @@ export default {
           value: '',
           isRequired: 'false'
         },
+        option: {
+          name: '선택',
+          type: 'Selection',
+          options: ['true', 'false'],
+          value: 'false',
+          isRequired: 'true'
+        },
         input2: {
           name: '대상',
           type: 'Fixed',
           value: '에이전트가 설치된 컴퓨터의 현재 사용자',
           comment: '고정 값'
         },
-        option: {
-          name: '선택',
-          type: 'Selection',
-          options: ['사용 중', '해당 사항 없음'],
-          value: '해당 사항 없음',
-          isRequired: 'true'
-        }
       }
     },
     isThere: {
@@ -250,8 +249,8 @@ export default {
         option: {
           name: '선택',
           type: 'Selection',
-          options: ['있다', '없다'],
-          value: '없다',
+          options: ['true', 'false'],
+          value: 'false',
           isRequired: 'true'
         }
       }
@@ -259,8 +258,16 @@ export default {
     getMemoryStatus: {
       name: 'getMemoryStatus',
       type: 'condition',
+      loop: 'true',
       comment: '입력과 대상의 실시간 값을 선택의 항목으로 비교',
       parameters: {
+        option: {
+          name: '선택',
+          type: 'Selection',
+          options: ['>', '>=', '==', '<', '<='],
+          value: '==',
+          isRequired: 'true'
+        },
         input1: {
           name: '입력',
           type: 'Number',
@@ -276,20 +283,21 @@ export default {
           comment: '고정 값',
           isRequired: 'true'
         },
-        option: {
-          name: '선택',
-          type: 'Selection',
-          options: ['크다', '크거나 같다', '같다', '작다', '작거나 같다'],
-          value: '같다',
-          isRequired: 'true'
-        }
       }
     },
     getNetworkInStatus: {
       name: 'getNetworkInStatus',
       type: 'condition',
+      loop: 'true',
       comment: '입력과 대상의 실시간 값을 선택의 항목으로 비교',
       parameters: {
+        option: {
+          name: '연산자',
+          type: 'Selection',
+          options: ['>', '>=', '==', '<', '<='],
+          value: '==',
+          isRequired: 'true'
+        },
         input1: {
           name: '입력',
           type: 'Number',
@@ -304,20 +312,21 @@ export default {
           comment: '고정 값',
           isRequired: 'true'
         },
-        option: {
-          name: '선택',
-          type: 'Selection',
-          options: ['크다', '크거나 같다', '같다', '작다', '작거나 같다'],
-          value: '같다',
-          isRequired: 'true'
-        }
       }
     },
     getNetworkOutStatus: {
       name: 'getNetworkOutStatus',
       type: 'condition',
+      loop: 'true',
       comment: '입력과 대상의 실시간 값을 선택의 항목으로 비교',
       parameters: {
+        option: {
+          name: '연산자',
+          type: 'Selection',
+          options: ['>', '>=', '==', '<', '<='],
+          value: '==',
+          isRequired: 'true'
+        },
         input1: {
           name: '입력',
           type: 'Number',
@@ -332,20 +341,21 @@ export default {
           comment: '고정 값',
           isRequired: 'true'
         },
-        option: {
-          name: '선택',
-          type: 'Selection',
-          options: ['크다', '크거나 같다', '같다', '작다', '작거나 같다'],
-          value: '같다',
-          isRequired: 'true'
-        }
       }
     },
     getCPUStatus: {
       name: 'getCPUStatus',
       type: 'condition',
+      loop: 'true',
       comment: '입력과 대상의 실시간 값을 선택의 항목으로 비교',
       parameters: {
+        option: {
+          name: '연산자',
+          type: 'Selection',
+          options: ['>', '>=', '==', '<', '<='],
+          value: '==',
+          isRequired: 'true'
+        },
         input1: {
           name: '입력',
           type: 'Number',
@@ -361,20 +371,13 @@ export default {
           comment: '고정 값',
           isRequired: 'true'
         },
-        option: {
-          name: '선택',
-          type: 'Selection',
-          options: ['크다', '크거나 같다', '같다', '작다', '작거나 같다'],
-          value: '같드',
-          isRequired: 'true'
-        }
       }
     }
   },
   install: {
     installMSI: {
       name: 'installMSI',
-      type: 'system',
+      type: 'install',
       comment: '.msi 파일을 설치',
       parameters: {
         input1: {
@@ -384,32 +387,11 @@ export default {
           value: '',
           isRequired: 'true'
         },
-        input2: {
-          name: '대상',
-          type: 'Fixed',
-          value: '에이전트가 설치된 컴퓨터',
-          comment: '고정 값',
-          isRequired: 'true'
-        },
         option: {
           name: '선택',
           type: 'Message',
           comment: '경고문의 내용을 입력할 수 있는 새 창을 띄웁니다.',
           options: ['없음', '경고문 생성'],
-          value: '없음',
-          isRequired: 'true'
-        }
-      }
-    },
-    installPKG: {
-      name: 'installPKG',
-      type: 'system',
-      comment: '.pkg/.mpkg 파일을 설치',
-      parameters: {
-        input1: {
-          name: '입력',
-          type: 'String',
-          comment: '설치할 파일의 전체 경로를 입력해주세요.',
           value: '',
           isRequired: 'true'
         },
@@ -420,12 +402,33 @@ export default {
           comment: '고정 값',
           isRequired: 'true'
         },
+      }
+    },
+    installPKG: {
+      name: 'installPKG',
+      type: 'install',
+      comment: '.pkg/.mpkg 파일을 설치',
+      parameters: {
+        input1: {
+          name: '입력',
+          type: 'String',
+          comment: '설치할 파일의 전체 경로를 입력해주세요.',
+          value: '',
+          isRequired: 'true'
+        },
         option: {
           name: '선택',
           type: 'Message',
           comment: '경고문의 내용을 입력할 수 있는 새 창을 띄웁니다.',
           options: ['없음', '경고문 생성'],
-          value: '없음',
+          value: '',
+          isRequired: 'true'
+        },
+        input2: {
+          name: '대상',
+          type: 'Fixed',
+          value: '에이전트가 설치된 컴퓨터',
+          comment: '고정 값',
           isRequired: 'true'
         }
       }
@@ -444,6 +447,13 @@ export default {
           value: '',
           isRequired: 'true'
         },
+        option: {
+          name: '선택',
+          type: 'Selection',
+          options: ['Windows', 'macOS', 'Others'],
+          value: 'Windows',
+          isRequired: 'true'
+        },
         input2: {
           name: '대상',
           type: 'Fixed',
@@ -451,13 +461,6 @@ export default {
           comment: '고정 값',
           isRequired: 'true'
         },
-        option: {
-          name: '선택',
-          type: 'Selection',
-          options: ['Windows', 'macOS', 'Others'],
-          value: 'Windows',
-          isRequired: 'true'
-        }
       }
     },
     executePowerShellCommand: {
@@ -472,6 +475,13 @@ export default {
           value: '',
           isRequired: 'true'
         },
+        option: {
+          name: '선택',
+          type: 'Selection',
+          options: ['Windows', 'macOS', 'Others'],
+          value: 'Windows',
+          isRequired: 'true'
+        },
         input2: {
           name: '대상',
           type: 'Fixed',
@@ -479,13 +489,6 @@ export default {
           comment: '고정 값',
           isRequired: 'true'
         },
-        option: {
-          name: '선택',
-          type: 'Selection',
-          options: ['Windows', 'macOS', 'Others'],
-          value: 'Windows',
-          isRequired: 'true'
-        }
       }
     },
     executeAutomator: {
@@ -500,6 +503,13 @@ export default {
           comment: '기존에 생성되어 있는 Automator',
           isRequired: 'true'
         },
+        option: {
+          name: '선택',
+          type: 'Selection',
+          options: ['Windows', 'macOS', 'Others'],
+          value: 'Windows',
+          isRequired: 'true'
+        },
         input2: {
           name: '대상',
           type: 'Fixed',
@@ -507,13 +517,6 @@ export default {
           comment: '고정 값',
           isRequired: 'true'
         },
-        option: {
-          name: '선택',
-          type: 'Selection',
-          options: ['Windows', 'macOS', 'Others'],
-          value: 'Windows',
-          isRequired: 'true'
-        }
       }
     },
     reboot: {
@@ -528,6 +531,14 @@ export default {
           value: '0',
           isRequired: 'true'
         },
+        option: {
+          name: '선택',
+          type: 'Message',
+          comment: '경고문의 내용을 입력할 수 있는 새 창을 띄웁니다.',
+          options: ['없음', '경고문 생성'],
+          value: '',
+          isRequired: 'true'
+        },
         input2: {
           name: '대상',
           type: 'Fixed',
@@ -535,14 +546,6 @@ export default {
           value: '에이전트가 설치된 컴퓨터',
           isRequired: 'false'
         },
-        option: {
-          name: '선택',
-          type: 'Message',
-          comment: '경고문의 내용을 입력할 수 있는 새 창을 띄웁니다.',
-          options: ['없음', '경고문 생성'],
-          value: '없음',
-          isRequired: 'true'
-        }
       }
     },
     shutdown: {
@@ -557,6 +560,14 @@ export default {
           value: '0',
           isRequired: 'true'
         },
+        option: {
+          name: '선택',
+          type: 'Message',
+          comment: '경고문의 내용을 입력할 수 있는 새 창을 띄웁니다.',
+          options: ['없음', '경고문 생성'],
+          value: '',
+          isRequired: 'true'
+        },
         input2: {
           name: '대상',
           type: 'Fixed',
@@ -564,14 +575,6 @@ export default {
           value: '에이전트가 설치된 컴퓨터',
           isRequired: 'false'
         },
-        option: {
-          name: '선택',
-          type: 'Message',
-          comment: '경고문의 내용을 입력할 수 있는 새 창을 띄웁니다.',
-          options: ['없음', '경고문 생성'],
-          value: '없음',
-          isRequired: 'true'
-        }
       }
     },
     sleep: {
@@ -586,6 +589,14 @@ export default {
           value: '0',
           isRequired: 'true'
         },
+        option: {
+          name: '선택',
+          type: 'Message',
+          comment: '경고문의 내용을 입력할 수 있는 새 창을 띄웁니다.',
+          options: ['없음', '경고문 생성'],
+          value: '',
+          isRequired: 'true'
+        },
         input2: {
           name: '대상',
           type: 'Fixed',
@@ -593,14 +604,6 @@ export default {
           value: '에이전트가 설치된 컴퓨터',
           isRequired: 'false'
         },
-        option: {
-          name: '선택',
-          type: 'Message',
-          comment: '경고문의 내용을 입력할 수 있는 새 창을 띄웁니다.',
-          options: ['없음', '경고문 생성'],
-          value: '없음',
-          isRequired: 'true'
-        }
       }
     },
     sendMessage: {
@@ -672,8 +675,8 @@ export default {
         option: {
           name: '선택',
           type: 'Selection',
-          options: ['관리자', '일반 사용자'],
-          value: '일반 사용자',
+          options: ['admin', 'user'],
+          value: 'user',
           isRequired: 'true'
         }
       }
@@ -725,7 +728,7 @@ export default {
           name: '선택',
           type: 'Selection',
           options: ['없음', '경고문 생성'],
-          value: '없음',
+          value: '',
           isRequired: 'true'
         }
       }

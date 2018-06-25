@@ -3,7 +3,8 @@ import * as properties from '../../../../../Properties.js';
 import Axios from 'axios';
 import Dropdown from 'react-dropdown';
 import PopupModal from '../../Popup/PopupModal.js';
-import Editor from  './Editor.js';
+import Editor from './Editor.js';
+import componentSchema from '../../../../../InformationData/ComponentSchema.js';
 var TAG = "NewAutomator";
 export default class NewAutomator extends React.Component {
     constructor(props) {
@@ -56,9 +57,9 @@ export default class NewAutomator extends React.Component {
         Axios.post(properties.ServerURL + '/coworksys/api/automator/insert',
             body, header)
             .then(
-            Response => {
-                console.log(TAG, Response, body);
-            }
+                Response => {
+                    console.log(TAG, Response, body);
+                }
             );
     }
     showPopup(visible) {
@@ -81,7 +82,7 @@ export default class NewAutomator extends React.Component {
         }
     }
     movePage() {
-        
+
         if (this.state.Command.length > 0) {
             this.PopupModal.show(true, "automator_exit");
         }
@@ -110,10 +111,10 @@ export default class NewAutomator extends React.Component {
         Axios.post(properties.ServerURL + '/coworksys/api/automator/insert',
             body, header)
             .then(
-            Response => {
-                console.log(TAG, Response, body);
-                this.props.ContentsArea.refresh();
-            }
+                Response => {
+                    console.log(TAG, Response, body);
+                    this.props.ContentsArea.refresh();
+                }
             );
     }
     changeName(e) {
@@ -134,71 +135,165 @@ export default class NewAutomator extends React.Component {
                 "osType": "eAll"
             }, header)
             .then(
-            Response => {
-                let newList = Response.data.automatorGroupList;
-                let namelist = [];
-                for (var i = 0; i < newList.length; i++) {
-                    namelist = namelist.concat(newList[i].name);
+                Response => {
+                    let newList = Response.data.automatorGroupList;
+                    let namelist = [];
+                    for (var i = 0; i < newList.length; i++) {
+                        namelist = namelist.concat(newList[i].name);
+                    }
+                    this.setState({
+                        GroupList: namelist,
+                        Groupinfo: newList
+                    });
+                    console.log(TAG, Response);
                 }
-                this.setState({
-                    GroupList: namelist,
-                    Groupinfo: newList
-                });
-                console.log(TAG, Response);
-            }
             );
 
     }
 
     onChangeCommands(Commands) {
         this.setState({
-            Commands: this.parseCommands(Commands)
+            Commands: this.parseCommandsToString(Commands)
         });
     }
 
-    parseCommands(Commands) {
-        if (!Commands || Commands.length === 0) return;
-        var parsedCommands = [];
-        let columnArray = [0];
-        let depth = 1;
-        var currentCommand = {};
-        Commands.map((command, i) => {
-            if (depth === command.column) {
-                depth = command.column;
-                columnArray[depth - 1] += 1;
-            } else if (depth < command.column) {
-                depth = command.column;
-                columnArray.push(1);
-            } else {
-                depth = command.column;
-                columnArray[depth - 1] += 1;
-            }
+    // parseCommands(Commands) {
+    //     if (!Commands || Commands.length === 0) return;
+    //     var parsedCommands = [];
+    //     let columnArray = [0];
+    //     let depth = 1;
+    //     var currentCommand = {};
+    //     Commands.map((command, i) => {
+    //         if (depth === command.column) {
+    //             depth = command.column;
+    //             columnArray[depth - 1] += 1;
+    //         } else if (depth < command.column) {
+    //             depth = command.column;
+    //             columnArray.push(1);
+    //         } else {
+    //             depth = command.column;
+    //             columnArray[depth - 1] += 1;
+    //         }
 
-            currentCommand = parsedCommands;
-            for (let j = 0; j < depth; ++j) {
-                if (j > 0) {
-                    if (!currentCommand.commands[columnArray[j] - 1]) currentCommand.commands.push({});
-                    currentCommand = currentCommand.commands[columnArray[j] - 1];
-                }
-                else {
-                    if (!currentCommand[columnArray[j]- 1]) currentCommand.push({});
-                    currentCommand = currentCommand[columnArray[j]- 1];
+    //         currentCommand = parsedCommands;
+    //         for (let j = 0; j < depth; ++j) {
+    //             if (j > 0) {
+    //                 if (!currentCommand.commands[columnArray[j] - 1]) currentCommand.commands.push({});
+    //                 currentCommand = currentCommand.commands[columnArray[j] - 1];
+    //             }
+    //             else {
+    //                 if (!currentCommand[columnArray[j] - 1]) currentCommand.push({});
+    //                 currentCommand = currentCommand[columnArray[j] - 1];
+    //             }
+    //         }
+    //         currentCommand.type = command.type;
+    //         currentCommand.name = command.name;
+    //         currentCommand.parameters = {};
+    //         Object.keys(command.parameters).map((param) => {
+    //             currentCommand.parameters[param] = '';
+    //             currentCommand.parameters[param] = command.parameters[param].value;
+    //             return null;
+    //         });
+    //         if (currentCommand.type === 'condition') {
+    //             currentCommand.commands = [];
+    //         }
+    //         return null
+    //     });
+    //     console.log(parsedCommands);
+    //     return parsedCommands;
+    // }
+
+    parseCommandsToString(Commands) {
+        var parsedCommands = '';
+        let columnStack = 0;
+        Commands.map((command, i) => {
+            if (command.column <= columnStack) {
+                let prevColumnStack = columnStack;
+                let stackDiff = 0;
+                if (command.name === 'else') stackDiff = prevColumnStack - command.column;
+                else stackDiff = prevColumnStack - (command.column - 1);
+                for (let j = 1; j <= stackDiff; ++j) {
+                    for (let k = 0; k < prevColumnStack - j; ++k) {
+                        parsedCommands += '\t';
+                    }
+                    parsedCommands += '#END#\n';
                 }
             }
-            currentCommand.type = command.type;
-            currentCommand.name = command.name;
-            currentCommand.parameters = {};
-            Object.keys(command.parameters).map((param) => {
-                currentCommand.parameters[param] = '';
-                currentCommand.parameters[param] = command.parameters[param].value;
-                return null;
-            });
-            if (currentCommand.type === 'condition') {
-                currentCommand.commands = [];
+            for (let j = 0; j < command.column - 1; ++j) {
+                parsedCommands += `\t`;
             }
-            return null
+            if (command.type === 'condition') {
+                parsedCommands += `#${command.loop ? `LOOP ${command.name}` : (command.name === 'else' ? 'ELSE' : `IF ${command.name}`)}`;
+                Object.keys(command.parameters).map((param, j) => {
+                    if (command.parameters[param].type !== 'Null' && command.parameters[param].type !== 'Fixed') {
+                        if (command.parameters[param].name === '연산자') {
+                            parsedCommands += ` ${command.parameters[param].value}`;
+                        } else {
+                            parsedCommands += ` "${command.parameters[param].value}"`;
+                        }
+                    }
+                });
+                parsedCommands += '#\n';
+                columnStack = command.column;
+            } else {
+                parsedCommands += `##${command.name}(`;
+                let index = 0;
+                Object.keys(command.parameters).map((param) => {
+                    if (command.parameters[param].type !== 'Null' && command.parameters[param].type !== 'Fixed') {
+                        parsedCommands += `${index < 1 ? '' : ', '}"${command.parameters[param].value}"`;
+                        index += 1;
+                    }
+                });
+                parsedCommands += `)##\n`;
+                columnStack = command.column - 1;
+            }
         });
+        if (columnStack === 0) parsedCommands += '#END#\n';
+        for (let j = 1; j <= columnStack; ++j) {
+            for (let k = 0; k < columnStack - j; ++k) {
+                parsedCommands += '\t';
+            }
+            parsedCommands += '#END#\n';
+        }
+        console.log('Commands created by editor\n', Commands);
         console.log(parsedCommands);
+        console.log('Restored commands from string\n', this.parseCommandsToArray(parsedCommands));
+        return parsedCommands;
+    }
+
+    parseCommandsToArray(Commands) {
+        var parsedCommands = [];
+        let row = 0;
+        Commands.split('\n').map((statement) => {
+            let parsedStatement = {};
+            let name, type, parameters;
+            parsedStatement.column = statement.split('#')[0].length + 1;
+            statement = statement.trim();
+            if (statement === '#END#' || statement.length === 0) return null;
+            row += 1;
+            if (statement.match('##') && statement.match('##').index === 0) {
+                statement = statement.slice(2, -2);
+                name = statement.split('(')[0];
+                type = name.match('install') ? 'install' : 'system';
+                parameters = statement.slice(name.length + 1, -1).split(',').map(v => v.trim().replace(/\"/gi, ''));
+            } else {
+                if (statement.match('#') && statement.match('#').index === 0) {
+                    statement = statement.slice(1, -1);
+                    name = statement.split(' ')[1];
+                    type = 'condition';
+                    parameters = statement.split(' ').slice(2).map(v => v.trim().replace(/\"/gi, ''));
+                }
+            }
+            parsedStatement = Object.assign(componentSchema[type][name], parsedStatement, { row });
+            let index = 0;
+            Object.keys(parsedStatement.parameters).map((param, i) => {
+                if (parsedStatement.parameters[param].type !== 'Null' && parsedStatement.parameters[param].type !== 'Fixed') {
+                    parsedStatement.parameters[param].value = parameters[index];
+                    index += 1;
+                }
+            });
+            parsedCommands.push(parsedStatement);
+        });
         return parsedCommands;
     }
 
@@ -262,8 +357,9 @@ export default class NewAutomator extends React.Component {
         var dialog =
             <div style={{ position: "fixed", height: "100%", width: "100%" }}>
                 <div style={{
-                    width: 60, height: 90, backgroundColor: "white", color: "#2d4fb2", border: "1px solid #2d4fb2", float:"right",marginRight:325,marginTop:110,
-                    fontWeight: 700, display: "flex", alignContent: "center", flexDirection: "column"}}>
+                    width: 60, height: 90, backgroundColor: "white", color: "#2d4fb2", border: "1px solid #2d4fb2", float: "right", marginRight: 325, marginTop: 110,
+                    fontWeight: 700, display: "flex", alignContent: "center", flexDirection: "column"
+                }}>
                     <div onClick={this.saveAutomator} style={{ textAlign: "center", backgroundColor: this.state.hover == "save" ? "#2d4fb2" : "white", color: this.state.hover == "save" ? "white" : "#2d4fb2", height: 30, paddingTop: 5, cursor: "pointer" }} onMouseOver={this.mouseOver.bind(null, "save")} onMouseOut={this.mouseOver.bind(null, "")}><a >저장</a></div>
                     <div onClick={this.saveAs} style={{ textAlign: "center", backgroundColor: this.state.hover == "saveas" ? "#2d4fb2" : "white", color: this.state.hover == "saveas" ? "white" : "#2d4fb2", height: 30, paddingTop: 5, cursor: "pointer" }} onMouseOver={this.mouseOver.bind(null, "saveas")} onMouseOut={this.mouseOver.bind(null, "")}><a >복제</a></div>
                     <div onClick={this.showPopup.bind(null, false)} style={{ textAlign: "center", backgroundColor: this.state.hover == "cancel" ? "#2d4fb2" : "white", color: this.state.hover == "cancel" ? "white" : "#2d4fb2", height: 30, paddingTop: 5, cursor: "pointer" }} onMouseOver={this.mouseOver.bind(null, "cancel")} onMouseOut={this.mouseOver.bind(null, "")}><a >취소</a></div>
