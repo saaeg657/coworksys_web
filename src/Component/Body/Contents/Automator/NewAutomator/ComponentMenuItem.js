@@ -5,7 +5,10 @@ import { createDragPreview } from 'react-dnd-text-dragpreview';
 
 const componentSource = {
   beginDrag(props) {
-    props.onBeginDrag(props.component);
+    let component = Object.assign({}, props.component);
+    component.row = null;
+    component.column = null;
+    props.onBeginDrag(component);
     return {};
   },
   endDrag(props) {

@@ -43,10 +43,10 @@ class Statement extends React.Component {
     this.onMouseOver = this.onMouseOver.bind(this);
     this.onMouseLeave = this.onMouseLeave.bind(this);
   }
-  // componentDidMount() {
-  //   this.dragPreview = createDragPreview(`${this.props.statement.name}()`, dragPreviewStyle);
-  //   this.props.connectDragPreview(this.dragPreview);
-  // }
+  componentDidMount() {
+    this.dragPreview = createDragPreview(`${this.props.statement.name}()`, dragPreviewStyle);
+    this.props.connectDragPreview(this.dragPreview);
+  }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.statement.name !== this.props.statement.name) this.initDragPreview(nextProps.statement.name);

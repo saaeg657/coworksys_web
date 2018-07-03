@@ -203,27 +203,52 @@ export default class NewAutomator extends React.Component {
     //     return parsedCommands;
     // }
 
-    parseCommandsToString(Commands) {
+    parseCommandsToString(_Commands) {
+        let Commands = _Commands.slice();
         var parsedCommands = '';
-        let columnStack = 0;
+        let columnStack = [];
+        let extraColumn = 0;
         Commands.map((command, i) => {
-            if (command.column <= columnStack) {
-                let prevColumnStack = columnStack;
+            if (command.column + extraColumn <= columnStack.length) {
+                let prevColumnStack = columnStack.length;
                 let stackDiff = 0;
-                if (command.name === 'else') stackDiff = prevColumnStack - command.column;
-                else stackDiff = prevColumnStack - (command.column - 1);
-                for (let j = 1; j <= stackDiff; ++j) {
-                    for (let k = 0; k < prevColumnStack - j; ++k) {
+                let extraColumnPrev = 0;
+                let countIF = 0;
+                let k = 0;
+                while (countIF < command.column - 1) {
+                    if (columnStack[k] === 'LOOP') extraColumnPrev += 1;
+                    else countIF += 1;
+                    k += 1;
+                }
+                if (command.name === 'else') stackDiff = prevColumnStack - (command.column + extraColumnPrev);
+                else stackDiff = prevColumnStack - (command.column + extraColumnPrev - 1);
+                for (let j = 0; j < stackDiff; ++j) {
+                    for (let k = 0; k < prevColumnStack - j - 1; ++k) {
                         parsedCommands += '\t';
                     }
-                    parsedCommands += '#END#\n';
+                    if (columnStack[columnStack.length - 1] === 'LOOP') {
+                        parsedCommands += '#ENDLOOP#\n';
+                        extraColumn -= 1;
+                    } else {
+                        parsedCommands += '#ENDIF#\n';
+                    }
+                    columnStack.pop();
                 }
             }
-            for (let j = 0; j < command.column - 1; ++j) {
+
+            for (let j = 0; j < command.column - 1 + extraColumn; ++j) {
                 parsedCommands += `\t`;
             }
             if (command.type === 'condition') {
-                parsedCommands += `#${command.loop ? `LOOP ${command.name}` : (command.name === 'else' ? 'ELSE' : `IF ${command.name}`)}`;
+                if (command.loop) {
+                    parsedCommands += `#LOOP#\n`;
+                    extraColumn += 1;
+                    columnStack.push('LOOP');
+                    for (let j = 0; j < command.column - 1 + extraColumn; ++j) {
+                        parsedCommands += `\t`;
+                    }
+                }
+                parsedCommands += `#${command.name === 'else' ? 'ELSE' : `IF ${command.name}`}`;
                 Object.keys(command.parameters).map((param, j) => {
                     if (command.parameters[param].type !== 'Null' && command.parameters[param].type !== 'Fixed') {
                         if (command.parameters[param].name === '연산자') {
@@ -234,7 +259,7 @@ export default class NewAutomator extends React.Component {
                     }
                 });
                 parsedCommands += '#\n';
-                columnStack = command.column;
+                columnStack.push('IF');
             } else {
                 parsedCommands += `##${command.name}(`;
                 let index = 0;
@@ -245,15 +270,15 @@ export default class NewAutomator extends React.Component {
                     }
                 });
                 parsedCommands += `)##\n`;
-                columnStack = command.column - 1;
+                if (command.column + extraColumn <= columnStack.length) columnStack.pop();
             }
         });
-        if (columnStack === 0) parsedCommands += '#END#\n';
-        for (let j = 1; j <= columnStack; ++j) {
-            for (let k = 0; k < columnStack - j; ++k) {
+        if (columnStack.length === 0) parsedCommands += '#END#\n';
+        for (let j = columnStack.length - 1; j >= 0; --j) {
+            for (let k = 0; k < j; ++k) {
                 parsedCommands += '\t';
             }
-            parsedCommands += '#END#\n';
+            parsedCommands += (columnStack[j] === 'LOOP' ? '#ENDLOOP#\n' : '#ENDIF#\n');
         }
         console.log('Commands created by editor\n', Commands);
         console.log(parsedCommands);
@@ -261,15 +286,19 @@ export default class NewAutomator extends React.Component {
         return parsedCommands;
     }
 
-    parseCommandsToArray(Commands) {
+    parseCommandsToArray(_Commands) {
+        let Commands = _Commands.slice();
         var parsedCommands = [];
         let row = 0;
+        let extraColumn = 0;
         Commands.split('\n').map((statement) => {
             let parsedStatement = {};
             let name, type, parameters;
-            parsedStatement.column = statement.split('#')[0].length + 1;
+            parsedStatement.column = statement.split('#')[0].length + 1 - extraColumn;
             statement = statement.trim();
-            if (statement === '#END#' || statement.length === 0) return null;
+            if (statement === '#LOOP#') extraColumn += 1;
+            if (statement === '#ENDLOOP#') extraColumn -= 1;
+            if (statement === '#LOOP#' || statement === '#END#' || statement === '#ENDIF#' || statement === '#ENDLOOP#' || statement.length === 0) return null;
             row += 1;
             if (statement.match('##') && statement.match('##').index === 0) {
                 statement = statement.slice(2, -2);
