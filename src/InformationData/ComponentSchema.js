@@ -8,6 +8,14 @@ export default {
         
       }
     },
+    break: {
+      name: 'break',
+      type: 'condition',
+      comment: 'break',
+      parameters: {
+        
+      }
+    },
     checkVariable: {
       name: 'checkVariable',
       type: 'condition',

@@ -227,10 +227,10 @@ export default class NewAutomator extends React.Component {
                         parsedCommands += '\t';
                     }
                     if (columnStack[columnStack.length - 1] === 'LOOP') {
-                        parsedCommands += '#ENDLOOP#\n';
+                        parsedCommands += '#ENDLOOP#\r\n';
                         extraColumn -= 1;
                     } else {
-                        parsedCommands += '#ENDIF#\n';
+                        parsedCommands += '#ENDIF#\r\n';
                     }
                     columnStack.pop();
                 }
@@ -241,14 +241,14 @@ export default class NewAutomator extends React.Component {
             }
             if (command.type === 'condition') {
                 if (command.loop) {
-                    parsedCommands += `#LOOP#\n`;
+                    parsedCommands += `#LOOP#\r\n`;
                     extraColumn += 1;
                     columnStack.push('LOOP');
                     for (let j = 0; j < command.column - 1 + extraColumn; ++j) {
                         parsedCommands += `\t`;
                     }
                 }
-                parsedCommands += `#${command.name === 'else' ? 'ELSE' : `IF ${command.name}`}`;
+                parsedCommands += `#${(command.name === 'else' || command.name === 'break') ? `${command.name.toUpperCase()}` : `IF ${command.name}`}`;
                 Object.keys(command.parameters).map((param, j) => {
                     if (command.parameters[param].type !== 'Null' && command.parameters[param].type !== 'Fixed') {
                         if (command.parameters[param].name === '연산자') {
@@ -258,8 +258,8 @@ export default class NewAutomator extends React.Component {
                         }
                     }
                 });
-                parsedCommands += '#\n';
-                columnStack.push('IF');
+                parsedCommands += '#\r\n';
+                if (command.name !== 'break') columnStack.push('IF');
             } else {
                 parsedCommands += `##${command.name}(`;
                 let index = 0;
@@ -269,16 +269,16 @@ export default class NewAutomator extends React.Component {
                         index += 1;
                     }
                 });
-                parsedCommands += `)##\n`;
+                parsedCommands += `)##\r\n`;
                 if (command.column + extraColumn <= columnStack.length) columnStack.pop();
             }
         });
-        if (columnStack.length === 0) parsedCommands += '#END#\n';
+        if (columnStack.length === 0) parsedCommands += '#END#\r\n';
         for (let j = columnStack.length - 1; j >= 0; --j) {
             for (let k = 0; k < j; ++k) {
                 parsedCommands += '\t';
             }
-            parsedCommands += (columnStack[j] === 'LOOP' ? '#ENDLOOP#\n' : '#ENDIF#\n');
+            parsedCommands += (columnStack[j] === 'LOOP' ? '#ENDLOOP#\r\n' : '#ENDIF#\r\n');
         }
         console.log('Commands created by editor\n', Commands);
         console.log(parsedCommands);
@@ -305,13 +305,11 @@ export default class NewAutomator extends React.Component {
                 name = statement.split('(')[0];
                 type = name.match('install') ? 'install' : 'system';
                 parameters = statement.slice(name.length + 1, -1).split(',').map(v => v.trim().replace(/\"/gi, ''));
-            } else {
-                if (statement.match('#') && statement.match('#').index === 0) {
-                    statement = statement.slice(1, -1);
-                    name = statement.split(' ')[1];
-                    type = 'condition';
-                    parameters = statement.split(' ').slice(2).map(v => v.trim().replace(/\"/gi, ''));
-                }
+            } else if (statement.match('#') && statement.match('#').index === 0) {
+                statement = statement.slice(1, -1);
+                name = statement.split(' ').length > 1 ? statement.split(' ')[1] : statement.split(' ')[0].toLowerCase();
+                type = 'condition';
+                parameters = statement.split(' ').slice(2).map(v => v.trim().replace(/\"/gi, ''));
             }
             parsedStatement = Object.assign(componentSchema[type][name], parsedStatement, { row });
             let index = 0;

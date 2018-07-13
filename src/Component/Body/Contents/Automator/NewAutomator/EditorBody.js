@@ -48,7 +48,7 @@ export default class EditorBody extends React.Component {
                   row={statement.row}
                   spaceWidth={50}
                   spaceHeight={5}
-                  maxColumn={i > 0 ? shownStatementList[i - 1].type === 'condition' ? shownStatementList[i - 1].column + 1 : shownStatementList[i - 1].column : 1}
+                  maxColumn={i > 0 ? ((shownStatementList[i - 1].type === 'condition' && shownStatementList[i - 1].name !== 'break') ? shownStatementList[i - 1].column + 1 : shownStatementList[i - 1].column) : 1}
                   onDropStatement={onDropStatement}
                 />
                 <Statement
@@ -73,7 +73,7 @@ export default class EditorBody extends React.Component {
             row={statementList.length ? statementList.length + 1 : 1}
             spaceWidth={50}
             spaceHeight={800}
-            maxColumn={shownStatementList.length ? (shownStatementList[shownStatementList.length - 1].type === 'condition' ? shownStatementList[shownStatementList.length - 1].column + 1 : shownStatementList[shownStatementList.length - 1].column) : 1}
+            maxColumn={shownStatementList.length ? (shownStatementList[shownStatementList.length - 1].type === 'condition' && shownStatementList[shownStatementList.length - 1].name !== 'break' ? shownStatementList[shownStatementList.length - 1].column + 1 : shownStatementList[shownStatementList.length - 1].column) : 1}
             onDropStatement={onDropStatement}
           />
         </div>

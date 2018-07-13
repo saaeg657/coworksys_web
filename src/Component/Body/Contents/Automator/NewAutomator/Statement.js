@@ -130,7 +130,7 @@ class Statement extends React.Component {
               marginLeft: columnWidth * (column - 1) - (foldable && column > 1 ? 15 : 0),
               height: lineHeight - 5
             }}
-            onClick={() => { if (statement.name !== 'else') onClickStatement(row); }}
+            onClick={() => { if (statement.name !== 'else' && statement.name !== 'break') onClickStatement(row); }}
           >
             <div
               style={{
@@ -139,9 +139,9 @@ class Statement extends React.Component {
                 float: 'left'
               }}
             >
-              <span style={{ fontSize: 12, color: '#1d43c5', fontWeight: 900, fontStyle: 'normal' }}>{statement.type === 'condition' ? (statement.name === 'else' ? 'Else' : 'If ') : ''}</span>
-              <span style={{ color: '#69c1fc', fontStyle: 'italic' }}>{statement.name === 'else' ? '' : statement.name}</span>
-              <span>{statement.name === 'else' ? '' : ' ('}</span>
+              <span style={{ fontSize: 12, color: '#1d43c5', fontWeight: 900, fontStyle: 'normal' }}>{statement.type === 'condition' ? (statement.name === 'else' || statement.name === 'break' ? statement.name.toUpperCase() : 'IF ') : ''}</span>
+              <span style={{ color: '#69c1fc', fontStyle: 'italic' }}>{statement.name === 'else' || statement.name === 'break' ? '' : statement.name}</span>
+              <span>{statement.name === 'else' || statement.name === 'break' ? '' : ' ('}</span>
               {Object.keys(statement.parameters).map((param, i) => {
                 switch (statement.parameters[param].type) {
                   case 'Null':
@@ -214,7 +214,7 @@ class Statement extends React.Component {
                   }
                 }
               })}
-              <span>{statement.name === 'else' ? '' : ')'}</span>
+              <span>{statement.name === 'else' || statement.name === 'break' ? '' : ')'}</span>
             </div>
             {(this.state.isOver || selectedRow === row) && <div style={{ paddingLeft: 10, color: '#808080', cursor: 'pointer', float: 'left', paddingTop: 3 }} onClick={(e) => this.props.onClickRemoveStatement(e, this.props.row)}>remove</div>}
           </div>
