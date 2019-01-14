@@ -20,6 +20,7 @@ export default class Login extends React.Component {
             this.props.ViewManager.login(SessionUtil.getCookie("email"), SessionUtil.getCookie("userID"));
     }
     responseAPICallback(response, key) {
+        console.log(response, key);
         if (response.data["code"] == "eSuccess") {
             this.props.ViewManager.login(response.data[key].email, response.data[key].id, this.state.rememberAccount);
         }
@@ -73,7 +74,10 @@ export default class Login extends React.Component {
                                 <div style={{ cursor: "pointer" }} onClick={this.onChange.bind(null, "rememberAccount")}>계정 기억하기</div>
                             </div>
                             <div className="div-login-input" style={{ marginTop: 60 }}>
-                                <img src={'../images/btn_login.png'} onClick={this.login} style={{ cursor: "pointer" }} />
+                                {/* <img src={'../images/btn_login.png'} onClick={this.login} style={{ cursor: "pointer" }} /> */}
+                                <img src={'../images/btn_login.png'} onClick={() => {
+                                    this.props.ViewManager.login();
+                                }} style={{ cursor: "pointer" }} />
                             </div>
                         </form>
                     </div>
