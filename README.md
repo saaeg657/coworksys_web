@@ -129,3 +129,88 @@ Editor.js, EditorBody.js, ComponentMenuItem.js, Statement.js, StatementDetail.js
     }
 ]
 ```
+
+### Added Functions
+/src/Component/Body/Contents/Automator/NewAutomator.js line 162
+
+단순 배열 형태의 raw commands를 depth가 있는 배열로 parsing
+```
+    parseCommands(Commands) {
+        if (!Commands || Commands.length === 0) return;
+        console.log('original', Commands);
+        var parsedCommands = [];
+        let columnArray = [0];
+        let depth = 1;
+        var currentCommand = {};
+        Commands.forEach((command, i) => {
+            if (depth === command.column) {
+                depth = command.column;
+                columnArray[depth - 1] += 1;
+            } else if (depth < command.column) {
+                depth = command.column;
+                columnArray[depth - 1] = 1;
+            } else {
+                depth = command.column;
+                columnArray[depth - 1] += 1;
+            }
+
+            currentCommand = parsedCommands;
+            for (let j = 0; j < depth; ++j) {
+                if (j > 0) {
+                    if (!currentCommand.commands[columnArray[j] - 1]) currentCommand.commands.push({});
+                    currentCommand = currentCommand.commands[columnArray[j] - 1];
+                }
+                else {
+                    if (!currentCommand[columnArray[j] - 1]) currentCommand.push({});
+                    currentCommand = currentCommand[columnArray[j] - 1];
+                }
+            }
+            currentCommand.type = command.type;
+            currentCommand.name = command.name;
+            currentCommand.comment = command.comment;
+            currentCommand.parameters = {};
+            Object.keys(command.parameters).forEach((param) => {
+                currentCommand.parameters[param] = command.parameters[param].value;
+            });
+            if (currentCommand.type === 'condition') {
+                currentCommand.commands = [];
+            }
+        });
+        console.log('parsed', parsedCommands);
+        console.log('restored', this.restoreCommandsToArray(JSON.stringify(parsedCommands)));
+        return JSON.stringify(parsedCommands);
+    }
+
+```
+
+/src/Component/Body/Contents/Automator/NewAutomator.js line 209
+
+depth가 있는 배열을 다시 단순 배열로 restoring
+```
+    restoreCommandsToArray(Commands) {
+        if (!Commands || Commands.length === 0) return;
+        let _Commands = JSON.parse(Commands);
+        let restoredCommands = [];
+        let nextStatement = {};
+        let row = 1;
+        let column = 1;
+        _Commands = _Commands.map((v) => { v.column = column; return v; });
+        while (_Commands.length > 0) {
+            nextStatement = _Commands[0];
+            _Commands.splice(0, 1);
+            let newStatement = {};
+            if (nextStatement.name) newStatement.name = nextStatement.name;
+            if (nextStatement.type) newStatement.type = nextStatement.type;
+            if (nextStatement.parameters) newStatement.parameters = nextStatement.parameters;
+            if (nextStatement.comment) newStatement.comment = nextStatement.comment;
+            newStatement.row = row++;
+            newStatement.column = nextStatement.column;
+            restoredCommands.push(newStatement);
+            if (nextStatement.commands && nextStatement.commands.length > 0) {
+                _Commands = [...nextStatement.commands.map((v) => { v.column = nextStatement.column + 1; return v; }), ..._Commands];
+            }
+        }
+        return restoredCommands;
+    }
+```
+
