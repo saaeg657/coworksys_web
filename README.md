@@ -45,65 +45,80 @@ Editor.js, EditorBody.js, ComponentMenuItem.js, Statement.js, StatementDetail.js
     {
         "type": "condition",
         "name": "isUserLoggedIn",
-        "script": "",
+        "comment": "입력과 대상의 실시간 값을 선택의 항목으로 비교",
         "parameters": {
             "input": "username1",
             "target": "에이전트가 설치된 컴퓨터",
             "operator": "사용중"
         },
+        "row": 1,
+        "column": 1,
         "commands": [
             {
                 "type": "condition",
                 "name": "isUserActive",
-                "script": "",
+                "comment": "입력과 대상의 실시간 값을 선택의 항목으로 비교",
                 "parameters": {
                     "target": "에이전트가 설치된 컴퓨터",
                     "option": "사용중"
                 },
+                "row": 2,
+                "column": 2,
                 "commands": [
                     {
                         "type": "command",
                         "name": "installPKG",
+                        "comment" : "입력과 대상의 실시간 값을 선택의 항목으로 비교",
                         "script": "",
                         "parameters": {
                             "input": "/user/test/pkg-ex.pkg",
                             "target": "에이전트가 설치된 컴퓨터",
                             "option": "경고문을 입력하세요"
-                        }
+                        },
+                        "row": 3,
+                        "column": 3
                     }
                 ]
             },
             {
                 "type": "command",
                 "name": "installMSI",
-                "script": "",
+                "comment": ".msi 파일을 설치",
                 "parameters": {
                     "input": "/user/test/msi-ex.msi",
                     "target": "에이전트가 설치된 컴퓨터",
                     "option": "경고문을 입력하세요"
-                }
+                },
+                "row": 4,
+                "column": 2
             },
             {
                 "type": "command",
                 "name": "executeShellCommand",
-                "script": "",
+                "comment": "입력된 Shell command를 대상 에이전트의 장치에 지정된 권한으로 실행합니다.",
                 "parameters": {
                     "input": "shutdown -r -t 60",
                     "target": "에이전트가 설치된 컴퓨터",
                     "option": "macOS"
-                }
+                },
+                "row": 5,
+                "column": 2
             }
         ]
     },
     {
         "type": "condition",
         "name": "else",
-        "script": "",
+        "comment": "else",
+        "row": 6,
+        "column": 1,
         "commands": [
             {
                 "type": "command",
                 "name": "shutdown",
-                "script": "",
+                "comment": "입력만큼의 시간 후에 시스템을 종료 합니다.",
+                "row": 7,
+                "column": 2,
                 "parameters": {
                     "input": "360",
                     "target": "에이전트가 설치된 컴퓨터",
