@@ -153,176 +153,205 @@ export default class NewAutomator extends React.Component {
 
     onChangeCommands(Commands) {
         this.setState({
-            Commands: this.parseCommandsToString(Commands)
+            Commands: this.parseCommands(Commands)
         });
     }
 
-    // parseCommands(Commands) {
-    //     if (!Commands || Commands.length === 0) return;
-    //     var parsedCommands = [];
-    //     let columnArray = [0];
-    //     let depth = 1;
-    //     var currentCommand = {};
+
+    // 단순 배열 형태의 raw commands를 depth가 있는 배열로 parsing
+    parseCommands(Commands) {
+        if (!Commands || Commands.length === 0) return;
+        console.log('original', Commands);
+        var parsedCommands = [];
+        let columnArray = [0];
+        let depth = 1;
+        var currentCommand = {};
+        Commands.forEach((command, i) => {
+            if (depth === command.column) {
+                depth = command.column;
+                columnArray[depth - 1] += 1;
+            } else if (depth < command.column) {
+                depth = command.column;
+                columnArray[depth - 1] = 1;
+            } else {
+                depth = command.column;
+                columnArray[depth - 1] += 1;
+            }
+
+            currentCommand = parsedCommands;
+            for (let j = 0; j < depth; ++j) {
+                if (j > 0) {
+                    if (!currentCommand.commands[columnArray[j] - 1]) currentCommand.commands.push({});
+                    currentCommand = currentCommand.commands[columnArray[j] - 1];
+                }
+                else {
+                    if (!currentCommand[columnArray[j] - 1]) currentCommand.push({});
+                    currentCommand = currentCommand[columnArray[j] - 1];
+                }
+            }
+            currentCommand.type = command.type;
+            currentCommand.name = command.name;
+            currentCommand.comment = command.comment;
+            currentCommand.parameters = {};
+            Object.keys(command.parameters).forEach((param) => {
+                currentCommand.parameters[param] = command.parameters[param].value;
+            });
+            if (currentCommand.type === 'condition') {
+                currentCommand.commands = [];
+            }
+        });
+        console.log('parsed', parsedCommands);
+        console.log('restored', this.restoreCommandsToArray(JSON.stringify(parsedCommands)));
+        return JSON.stringify(parsedCommands);
+    }
+
+    // depth가 있는 배열을 다시 단순 배열로 restoring
+    restoreCommandsToArray(Commands) {
+        if (!Commands || Commands.length === 0) return;
+        let _Commands = JSON.parse(Commands);
+        let restoredCommands = [];
+        let nextStatement = {};
+        let row = 1;
+        let column = 1;
+        _Commands = _Commands.map((v) => { v.column = column; return v; });
+        while (_Commands.length > 0) {
+            nextStatement = _Commands[0];
+            _Commands.splice(0, 1);
+            let newStatement = {};
+            if (nextStatement.name) newStatement.name = nextStatement.name;
+            if (nextStatement.type) newStatement.type = nextStatement.type;
+            if (nextStatement.parameters) newStatement.parameters = nextStatement.parameters;
+            if (nextStatement.comment) newStatement.comment = nextStatement.comment;
+            newStatement.row = row++;
+            newStatement.column = nextStatement.column;
+            restoredCommands.push(newStatement);
+            if (nextStatement.commands && nextStatement.commands.length > 0) {
+                _Commands = [...nextStatement.commands.map((v) => { v.column = nextStatement.column + 1; return v; }), ..._Commands];
+            }
+        }
+        return restoredCommands;
+    }
+    // parseCommandsToString(_Commands) {
+    //     let Commands = _Commands.slice();
+    //     var parsedCommands = '';
+    //     let columnStack = [];
+    //     let extraColumn = 0;
     //     Commands.map((command, i) => {
-    //         if (depth === command.column) {
-    //             depth = command.column;
-    //             columnArray[depth - 1] += 1;
-    //         } else if (depth < command.column) {
-    //             depth = command.column;
-    //             columnArray.push(1);
-    //         } else {
-    //             depth = command.column;
-    //             columnArray[depth - 1] += 1;
+    //         if (command.column + extraColumn <= columnStack.length) {
+    //             let prevColumnStack = columnStack.length;
+    //             let stackDiff = 0;
+    //             let extraColumnPrev = 0;
+    //             let countIF = 0;
+    //             let k = 0;
+    //             while (countIF < command.column - 1) {
+    //                 if (columnStack[k] === 'LOOP') extraColumnPrev += 1;
+    //                 else countIF += 1;
+    //                 k += 1;
+    //             }
+    //             if (command.name === 'else') stackDiff = prevColumnStack - (command.column + extraColumnPrev);
+    //             else stackDiff = prevColumnStack - (command.column + extraColumnPrev - 1);
+    //             for (let j = 0; j < stackDiff; ++j) {
+    //                 for (let k = 0; k < prevColumnStack - j - 1; ++k) {
+    //                     parsedCommands += '\t';
+    //                 }
+    //                 if (columnStack[columnStack.length - 1] === 'LOOP') {
+    //                     parsedCommands += '#ENDLOOP#\r\n';
+    //                     extraColumn -= 1;
+    //                 } else {
+    //                     parsedCommands += '#ENDIF#\r\n';
+    //                 }
+    //                 columnStack.pop();
+    //             }
     //         }
 
-    //         currentCommand = parsedCommands;
-    //         for (let j = 0; j < depth; ++j) {
-    //             if (j > 0) {
-    //                 if (!currentCommand.commands[columnArray[j] - 1]) currentCommand.commands.push({});
-    //                 currentCommand = currentCommand.commands[columnArray[j] - 1];
-    //             }
-    //             else {
-    //                 if (!currentCommand[columnArray[j] - 1]) currentCommand.push({});
-    //                 currentCommand = currentCommand[columnArray[j] - 1];
-    //             }
+    //         for (let j = 0; j < command.column - 1 + extraColumn; ++j) {
+    //             parsedCommands += `\t`;
     //         }
-    //         currentCommand.type = command.type;
-    //         currentCommand.name = command.name;
-    //         currentCommand.parameters = {};
-    //         Object.keys(command.parameters).map((param) => {
-    //             currentCommand.parameters[param] = '';
-    //             currentCommand.parameters[param] = command.parameters[param].value;
-    //             return null;
-    //         });
-    //         if (currentCommand.type === 'condition') {
-    //             currentCommand.commands = [];
+    //         if (command.type === 'condition') {
+    //             if (command.loop) {
+    //                 parsedCommands += `#LOOP#\r\n`;
+    //                 extraColumn += 1;
+    //                 columnStack.push('LOOP');
+    //                 for (let j = 0; j < command.column - 1 + extraColumn; ++j) {
+    //                     parsedCommands += `\t`;
+    //                 }
+    //             }
+    //             parsedCommands += `#${(command.name === 'else' || command.name === 'break') ? `${command.name.toUpperCase()}` : `IF ${command.name}`}`;
+    //             Object.keys(command.parameters).map((param, j) => {
+    //                 if (command.parameters[param].type !== 'Null' && command.parameters[param].type !== 'Fixed') {
+    //                     if (command.parameters[param].name === '연산자') {
+    //                         parsedCommands += ` ${command.parameters[param].value}`;
+    //                     } else {
+    //                         parsedCommands += ` "${command.parameters[param].value}"`;
+    //                     }
+    //                 }
+    //             });
+    //             parsedCommands += '#\r\n';
+    //             if (command.name !== 'break') columnStack.push('IF');
+    //         } else {
+    //             parsedCommands += `##${command.name}(`;
+    //             let index = 0;
+    //             Object.keys(command.parameters).map((param) => {
+    //                 if (command.parameters[param].type !== 'Null' && command.parameters[param].type !== 'Fixed') {
+    //                     parsedCommands += `${index < 1 ? '' : ', '}"${command.parameters[param].value}"`;
+    //                     index += 1;
+    //                 }
+    //             });
+    //             parsedCommands += `)##\r\n`;
+    //             if (command.column + extraColumn <= columnStack.length) columnStack.pop();
     //         }
-    //         return null
     //     });
-    //     console.log(parsedCommands);
+    //     if (columnStack.length === 0) parsedCommands += '#END#\r\n';
+    //     for (let j = columnStack.length - 1; j >= 0; --j) {
+    //         for (let k = 0; k < j; ++k) {
+    //             parsedCommands += '\t';
+    //         }
+    //         parsedCommands += (columnStack[j] === 'LOOP' ? '#ENDLOOP#\r\n' : '#ENDIF#\r\n');
+    //     }
+    //     console.log(this.parseCommands(_Commands))
+    //     // console.log('Commands created by editor\n', Commands);
+    //     // console.log(parsedCommands);
+    //     // console.log('Restored commands from string\n', this.parseCommandsToArray(parsedCommands));
     //     return parsedCommands;
     // }
 
-    parseCommandsToString(_Commands) {
-        let Commands = _Commands.slice();
-        var parsedCommands = '';
-        let columnStack = [];
-        let extraColumn = 0;
-        Commands.map((command, i) => {
-            if (command.column + extraColumn <= columnStack.length) {
-                let prevColumnStack = columnStack.length;
-                let stackDiff = 0;
-                let extraColumnPrev = 0;
-                let countIF = 0;
-                let k = 0;
-                while (countIF < command.column - 1) {
-                    if (columnStack[k] === 'LOOP') extraColumnPrev += 1;
-                    else countIF += 1;
-                    k += 1;
-                }
-                if (command.name === 'else') stackDiff = prevColumnStack - (command.column + extraColumnPrev);
-                else stackDiff = prevColumnStack - (command.column + extraColumnPrev - 1);
-                for (let j = 0; j < stackDiff; ++j) {
-                    for (let k = 0; k < prevColumnStack - j - 1; ++k) {
-                        parsedCommands += '\t';
-                    }
-                    if (columnStack[columnStack.length - 1] === 'LOOP') {
-                        parsedCommands += '#ENDLOOP#\r\n';
-                        extraColumn -= 1;
-                    } else {
-                        parsedCommands += '#ENDIF#\r\n';
-                    }
-                    columnStack.pop();
-                }
-            }
-
-            for (let j = 0; j < command.column - 1 + extraColumn; ++j) {
-                parsedCommands += `\t`;
-            }
-            if (command.type === 'condition') {
-                if (command.loop) {
-                    parsedCommands += `#LOOP#\r\n`;
-                    extraColumn += 1;
-                    columnStack.push('LOOP');
-                    for (let j = 0; j < command.column - 1 + extraColumn; ++j) {
-                        parsedCommands += `\t`;
-                    }
-                }
-                parsedCommands += `#${(command.name === 'else' || command.name === 'break') ? `${command.name.toUpperCase()}` : `IF ${command.name}`}`;
-                Object.keys(command.parameters).map((param, j) => {
-                    if (command.parameters[param].type !== 'Null' && command.parameters[param].type !== 'Fixed') {
-                        if (command.parameters[param].name === '연산자') {
-                            parsedCommands += ` ${command.parameters[param].value}`;
-                        } else {
-                            parsedCommands += ` "${command.parameters[param].value}"`;
-                        }
-                    }
-                });
-                parsedCommands += '#\r\n';
-                if (command.name !== 'break') columnStack.push('IF');
-            } else {
-                parsedCommands += `##${command.name}(`;
-                let index = 0;
-                Object.keys(command.parameters).map((param) => {
-                    if (command.parameters[param].type !== 'Null' && command.parameters[param].type !== 'Fixed') {
-                        parsedCommands += `${index < 1 ? '' : ', '}"${command.parameters[param].value}"`;
-                        index += 1;
-                    }
-                });
-                parsedCommands += `)##\r\n`;
-                if (command.column + extraColumn <= columnStack.length) columnStack.pop();
-            }
-        });
-        if (columnStack.length === 0) parsedCommands += '#END#\r\n';
-        for (let j = columnStack.length - 1; j >= 0; --j) {
-            for (let k = 0; k < j; ++k) {
-                parsedCommands += '\t';
-            }
-            parsedCommands += (columnStack[j] === 'LOOP' ? '#ENDLOOP#\r\n' : '#ENDIF#\r\n');
-        }
-        console.log('Commands created by editor\n', Commands);
-        console.log(parsedCommands);
-        console.log('Restored commands from string\n', this.parseCommandsToArray(parsedCommands));
-        return parsedCommands;
-    }
-
-    parseCommandsToArray(_Commands) {
-        let Commands = _Commands.slice();
-        var parsedCommands = [];
-        let row = 0;
-        let extraColumn = 0;
-        Commands.split('\n').map((statement) => {
-            let parsedStatement = {};
-            let name, type, parameters;
-            parsedStatement.column = statement.split('#')[0].length + 1 - extraColumn;
-            statement = statement.trim();
-            if (statement === '#LOOP#') extraColumn += 1;
-            if (statement === '#ENDLOOP#') extraColumn -= 1;
-            if (statement === '#LOOP#' || statement === '#END#' || statement === '#ENDIF#' || statement === '#ENDLOOP#' || statement.length === 0) return null;
-            row += 1;
-            if (statement.match('##') && statement.match('##').index === 0) {
-                statement = statement.slice(2, -2);
-                name = statement.split('(')[0];
-                type = name.match('install') ? 'install' : 'system';
-                parameters = statement.slice(name.length + 1, -1).split(',').map(v => v.trim().replace(/\"/gi, ''));
-            } else if (statement.match('#') && statement.match('#').index === 0) {
-                statement = statement.slice(1, -1);
-                name = statement.split(' ').length > 1 ? statement.split(' ')[1] : statement.split(' ')[0].toLowerCase();
-                type = 'condition';
-                parameters = statement.split(' ').slice(2).map(v => v.trim().replace(/\"/gi, ''));
-            }
-            parsedStatement = Object.assign(componentSchema[type][name], parsedStatement, { row });
-            let index = 0;
-            Object.keys(parsedStatement.parameters).map((param, i) => {
-                if (parsedStatement.parameters[param].type !== 'Null' && parsedStatement.parameters[param].type !== 'Fixed') {
-                    parsedStatement.parameters[param].value = parameters[index];
-                    index += 1;
-                }
-            });
-            parsedCommands.push(parsedStatement);
-        });
-        return parsedCommands;
-    }
+    // parseCommandsToArray(_Commands) {
+    //     let Commands = _Commands.slice();
+    //     var parsedCommands = [];
+    //     let row = 0;
+    //     let extraColumn = 0;
+    //     Commands.split('\n').map((statement) => {
+    //         let parsedStatement = {};
+    //         let name, type, parameters;
+    //         parsedStatement.column = statement.split('#')[0].length + 1 - extraColumn;
+    //         statement = statement.trim();
+    //         if (statement === '#LOOP#') extraColumn += 1;
+    //         if (statement === '#ENDLOOP#') extraColumn -= 1;
+    //         if (statement === '#LOOP#' || statement === '#END#' || statement === '#ENDIF#' || statement === '#ENDLOOP#' || statement.length === 0) return null;
+    //         row += 1;
+    //         if (statement.match('##') && statement.match('##').index === 0) {
+    //             statement = statement.slice(2, -2);
+    //             name = statement.split('(')[0];
+    //             type = name.match('install') ? 'install' : 'system';
+    //             parameters = statement.slice(name.length + 1, -1).split(',').map(v => v.trim().replace(/\"/gi, ''));
+    //         } else if (statement.match('#') && statement.match('#').index === 0) {
+    //             statement = statement.slice(1, -1);
+    //             name = statement.split(' ').length > 1 ? statement.split(' ')[1] : statement.split(' ')[0].toLowerCase();
+    //             type = 'condition';
+    //             parameters = statement.split(' ').slice(2).map(v => v.trim().replace(/\"/gi, ''));
+    //         }
+    //         parsedStatement = Object.assign(componentSchema[type][name], parsedStatement, { row });
+    //         let index = 0;
+    //         Object.keys(parsedStatement.parameters).map((param, i) => {
+    //             if (parsedStatement.parameters[param].type !== 'Null' && parsedStatement.parameters[param].type !== 'Fixed') {
+    //                 parsedStatement.parameters[param].value = parameters[index];
+    //                 index += 1;
+    //             }
+    //         });
+    //         parsedCommands.push(parsedStatement);
+    //     });
+    //     return parsedCommands;
+    // }
 
     render() {
 

@@ -20,7 +20,6 @@ export default class Login extends React.Component {
             this.props.ViewManager.login(SessionUtil.getCookie("email"), SessionUtil.getCookie("userID"));
     }
     responseAPICallback(response, key) {
-        console.log(response, key);
         if (response.data["code"] == "eSuccess") {
             this.props.ViewManager.login(response.data[key].email, response.data[key].id, this.state.rememberAccount);
         }
